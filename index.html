@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transporter Logistics — Bike, Interstate &amp; International Delivery in Lagos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;0,800;0,900;1,800&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --navy:#0C2340;
+    --navy-2:#132C4F;
+    --red:#E01E26;
+    --red-dark:#B3151B;
+    --blue:#1B4F9C;
+    --paper:#F6F3ED;
+    --paper-2:#EFEAE1;
+    --ink:#171A1F;
+    --slate:#5B6472;
+    --line: rgba(12,35,64,0.12);
+    --white:#FFFFFF;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  h1,h2,h3{
+    font-family:'Archivo',sans-serif;
+    font-weight:900;
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    color:var(--navy);
+  }
+  .eyebrow-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--red);
+    background:rgba(224,30,38,0.08);
+    border:1px solid rgba(224,30,38,0.22);
+    padding:6px 14px 6px 12px;
+    border-radius:100px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-family:'Manrope',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:14px 26px;
+    border-radius:8px;
+    border:2px solid transparent;
+    cursor:pointer;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    white-space:nowrap;
+  }
+  .btn-red{
+    background:var(--red);
+    color:#fff;
+    box-shadow:0 6px 0 var(--red-dark);
+  }
+  .btn-red:hover{ transform:translateY(2px); box-shadow:0 4px 0 var(--red-dark); }
+  .btn-outline{
+    background:transparent;
+    border-color:rgba(255,255,255,0.55);
+    color:#fff;
+  }
+  .btn-outline:hover{ background:rgba(255,255,255,0.12); }
+  .btn-navy{
+    background:var(--navy);
+    color:#fff;
+    box-shadow:0 6px 0 #071527;
+  }
+  .btn-navy:hover{ transform:translateY(2px); box-shadow:0 4px 0 #071527; }
+
+  /* ===== NAV ===== */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(246,243,237,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:82px;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ height:44px; width:44px; border-radius:9px; }
+  .brand-word{
+    font-family:'Archivo', sans-serif;
+    font-weight:900;
+    font-size:20px;
+    color:var(--navy);
+    letter-spacing:-0.01em;
+  }
+  .brand-word span{ color:var(--red); }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:36px;
+  }
+  .nav-links a{
+    font-size:15px;
+    font-weight:600;
+    color:var(--navy);
+    opacity:.75;
+    transition:opacity .15s;
+  }
+  .nav-links a:hover{ opacity:1; }
+  .nav-cta{ display:flex; align-items:center; gap:18px; }
+  .nav-cta .phone{ font-size:14px; font-weight:700; color:var(--navy); display:flex; align-items:center; gap:8px;}
+  @media (max-width:900px){
+    .nav-links{ display:none; }
+    .nav-cta .phone{ display:none; }
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    background:var(--navy);
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute; inset:0;
+    background-image:url('HERO_IMAGE_SRC');
+    background-size:cover;
+    background-position:center 30%;
+    opacity:0.34;
+  }
+  .hero-fade{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(12,35,64,0.72) 0%, rgba(12,35,64,0.90) 55%, var(--navy) 100%);
+  }
+  .hero-inner{
+    position:relative;
+    padding:88px 32px 0;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero h1{
+    color:#fff;
+    font-size:clamp(36px, 4.6vw, 60px);
+    margin:22px 0 20px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:#FF6A6F;
+  }
+  .hero p.lede{
+    color:rgba(255,255,255,0.78);
+    font-size:18px;
+    max-width:480px;
+    margin-bottom:34px;
+  }
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:56px;}
+  .hero-services-strip{
+    display:flex; gap:28px; flex-wrap:wrap;
+    color:rgba(255,255,255,0.85);
+    font-size:14px; font-weight:700;
+    padding-bottom:34px;
+  }
+  .hero-services-strip li{ display:flex; align-items:center; gap:8px; }
+
+  /* quote card */
+  .quote-card{
+    background:#fff;
+    border-radius:18px;
+    padding:28px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.45);
+    position:relative;
+    top:24px;
+  }
+  .quote-card h3{
+    font-size:19px;
+    margin-bottom:4px;
+  }
+  .quote-card .sub{
+    font-size:14px; color:var(--slate); margin-bottom:20px;
+  }
+  .qc-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:12px;
+  }
+  .qc-field{
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .qc-field label{
+    font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--slate);
+  }
+  .qc-field select, .qc-field input{
+    border:1.5px solid var(--line);
+    border-radius:9px;
+    padding:11px 12px;
+    font-family:'Manrope',sans-serif;
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--ink);
+    background:var(--paper);
+  }
+  .qc-field select:focus, .qc-field input:focus{ outline:2px solid var(--blue); outline-offset:1px;}
+  .qc-full{ grid-column:1 / -1; }
+  .quote-card .btn{ width:100%; margin-top:10px; padding:15px; font-size:15.5px;}
+  .quote-card .note{
+    font-size:12.5px; color:var(--slate); text-align:center; margin-top:12px;
+  }
+
+  @media (max-width:900px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .quote-card{ top:0; margin-bottom:20px;}
+  }
+
+  /* ===== SECTION SHARED ===== */
+  section{ padding:96px 0; }
+  .section-head{
+    max-width:620px;
+    margin-bottom:56px;
+  }
+  .section-head .eyebrow-tag{ margin-bottom:18px; }
+  .section-head h2{ font-size:clamp(28px,3.4vw,40px); margin-bottom:14px;}
+  .section-head p{ color:var(--slate); font-size:16.5px; }
+
+  /* ===== SERVICES ===== */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+  }
+  .service-card{
+    background:var(--white);
+    padding:34px 26px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    min-height:250px;
+  }
+  .service-icon{
+    width:52px; height:52px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--navy);
+  }
+  .service-icon svg{ width:26px; height:26px; }
+  .service-card:nth-child(1) .service-icon{ background:var(--red); }
+  .service-card:nth-child(2) .service-icon{ background:var(--blue); }
+  .service-card:nth-child(3) .service-icon{ background:var(--navy); }
+  .service-card:nth-child(4) .service-icon{ background:#2E7D5B; }
+  .service-card h3{ font-size:19px; }
+  .service-card p{ font-size:14.5px; color:var(--slate); flex:1; }
+  .service-card .tag{
+    font-size:12.5px; font-weight:700; color:var(--navy); opacity:.6;
+  }
+  @media (max-width:900px){
+    .services-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:560px){
+    .services-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ===== HOW IT WORKS ===== */
+  .how{
+    background:var(--paper-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .how-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:44px;
+  }
+  .how-step{ position:relative; padding-left:2px; }
+  .how-num{
+    font-family:'Archivo',sans-serif;
+    font-weight:900;
+    font-size:15px;
+    color:var(--red);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .how-num .line{
+    height:1.5px; flex:1; background:var(--line);
+  }
+  .how-step h3{ font-size:20px; margin-bottom:10px;}
+  .how-step p{ color:var(--slate); font-size:15px; }
+  @media (max-width:900px){ .how-grid{ grid-template-columns:1fr; gap:36px; } }
+
+  /* ===== COVERAGE / WHY ===== */
+  .coverage{
+    display:grid;
+    grid-template-columns:0.95fr 1.05fr;
+    gap:64px;
+    align-items:center;
+  }
+  .coverage-visual{
+    background:var(--navy);
+    border-radius:20px;
+    padding:40px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    min-height:380px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .coverage-visual::after{
+    content:"";
+    position:absolute; right:-60px; bottom:-60px;
+    width:220px; height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(224,30,38,0.35), transparent 70%);
+  }
+  .coverage-visual .route{
+    display:flex; align-items:center; gap:10px;
+    font-size:14px; font-weight:700;
+    color:rgba(255,255,255,0.85);
+    padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,0.14);
+  }
+  .coverage-visual .route:last-of-type{ border-bottom:none; }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--red); flex-shrink:0;}
+  .coverage-list{ display:flex; flex-direction:column; gap:26px; }
+  .coverage-item{ display:flex; gap:18px; }
+  .coverage-item .num{
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:14px; color:var(--white);
+    background:var(--navy); width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .coverage-item h3{ font-size:18px; margin-bottom:6px;}
+  .coverage-item p{ color:var(--slate); font-size:14.5px; }
+  @media (max-width:900px){ .coverage{ grid-template-columns:1fr; } }
+
+  /* ===== CTA BAND ===== */
+  .cta-band{
+    background:var(--navy);
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-band::before{
+    content:"";
+    position:absolute; left:-80px; top:-120px;
+    width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(27,79,156,0.55), transparent 70%);
+  }
+  .cta-inner{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .cta-inner h2{ color:#fff; font-size:clamp(26px,3vw,36px); max-width:480px; }
+  .cta-inner p{ color:rgba(255,255,255,0.7); margin-top:10px; font-size:15.5px; }
+  .cta-actions{ display:flex; gap:16px; flex-wrap:wrap; }
+
+  /* ===== FOOTER ===== */
+  footer{
+    background:var(--ink);
+    color:rgba(255,255,255,0.65);
+    padding:64px 0 28px;
+  }
+  .foot-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:44px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .foot-brand .brand-word{ color:#fff; }
+  .foot-brand p{ font-size:14px; margin-top:14px; max-width:280px; color:rgba(255,255,255,0.55); }
+  .foot-col h4{
+    font-size:13px; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:rgba(255,255,255,0.9);
+    margin-bottom:16px;
+  }
+  .foot-col ul{ display:flex; flex-direction:column; gap:11px; }
+  .foot-col a{ font-size:14.5px; color:rgba(255,255,255,0.6); transition:color .15s; }
+  .foot-col a:hover{ color:#fff; }
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center; padding-top:24px;
+    font-size:13px; color:rgba(255,255,255,0.4); flex-wrap:wrap; gap:12px;
+  }
+  @media (max-width:900px){ .foot-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* whatsapp float */
+  .wa-float{
+    position:fixed;
+    bottom:26px; right:26px;
+    z-index:60;
+    background:#22C35E;
+    width:58px; height:58px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 24px rgba(34,195,94,0.45);
+    transition:transform .18s ease;
+  }
+  .wa-float:hover{ transform:scale(1.07); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand">
+      <img src="LOGO_IMAGE_SRC" alt="Transporter Logistics logo">
+      <span class="brand-word">Transporter<span> Logistics</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#how">How it works</a>
+      <a href="#coverage">Coverage</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a class="phone" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A8.86 8.86 0 0 0 3.16 16.42L2 21l4.7-1.13a8.86 8.86 0 0 0 4.24 1.08h.01a8.86 8.86 0 0 0 6.65-14.63Z" stroke="#0C2340" stroke-width="1.6"/></svg>
+        Chat on WhatsApp
+      </a>
+      <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Book a pickup</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0;">
+    <div class="hero-bg"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-inner">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow-tag">● Serving Ogba &amp; Agege, Lagos</span>
+          <h1>Your delivery,<br>handled with <em>speed</em><br>and precision.</h1>
+          <p class="lede">Transporter Logistics moves your packages by bike across Lagos, by road across states, and by air across borders — with free warehousing while you wait.</p>
+          <div class="hero-actions">
+            <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Send us a DM on WhatsApp</a>
+            <a class="btn btn-outline" href="#services">See our services</a>
+          </div>
+          <ul class="hero-services-strip">
+            <li>🏍️ Bike delivery</li>
+            <li>🚚 Interstate haulage</li>
+            <li>🌎 International shipping</li>
+            <li>🏭 Free warehousing</li>
+          </ul>
+        </div>
+
+        <div class="quote-card">
+          <h3>Request a pickup</h3>
+          <div class="sub">Tell us what you're sending — we'll take it from there.</div>
+          <div class="qc-row">
+            <div class="qc-field">
+              <label>Pickup area</label>
+              <input type="text" placeholder="e.g. Ogba, Lagos">
+            </div>
+            <div class="qc-field">
+              <label>Destination</label>
+              <input type="text" placeholder="City or country">
+            </div>
+          </div>
+          <div class="qc-row">
+            <div class="qc-field">
+              <label>Service</label>
+              <select>
+                <option>Bike delivery</option>
+                <option>Interstate</option>
+                <option>International</option>
+                <option>Warehousing</option>
+              </select>
+            </div>
+            <div class="qc-field">
+              <label>Pickup date</label>
+              <input type="date">
+            </div>
+          </div>
+          <a class="btn btn-navy" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Get a quote on WhatsApp →</a>
+          <div class="note">No account needed — we reply on WhatsApp in minutes.</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:64px;"></div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-tag">What we move</span>
+        <h2>Four ways to ship, one dependable partner.</h2>
+        <p>From a same-day envelope across Ogba to a container crossing a border, pick the lane that fits — we handle the rest.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="5.5" cy="17.5" r="3" stroke="#fff" stroke-width="1.7"/><circle cx="18.5" cy="17.5" r="3" stroke="#fff" stroke-width="1.7"/><path d="M8.5 17.5h6l3-7h-9l-2 4M12 10.5V6h-3" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Bike delivery</h3>
+          <p>Fast dispatch riders for parcels, documents and errands across Lagos, door to door.</p>
+          <span class="tag">Same-area · Same-day</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="7" width="12" height="8" rx="1.2" stroke="#fff" stroke-width="1.7"/><path d="M14.5 10h3.3L21 13v2h-6.5" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="17.3" r="1.8" stroke="#fff" stroke-width="1.6"/><circle cx="17.5" cy="17.3" r="1.8" stroke="#fff" stroke-width="1.6"/></svg>
+          </div>
+          <h3>Interstate</h3>
+          <p>Scheduled road haulage connecting Lagos to destinations across Nigeria.</p>
+          <span class="tag">State to state</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="1.7"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.6 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.6-3.6-9S9.6 5.5 12 3Z" stroke="#fff" stroke-width="1.5"/></svg>
+          </div>
+          <h3>International</h3>
+          <p>Cross-border shipping for parcels and cargo heading outside Nigeria.</p>
+          <span class="tag">Worldwide reach</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 4l9 6.5" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="4.5" y="10.5" width="15" height="9" stroke="#fff" stroke-width="1.7"/><path d="M9 19.5V14h6v5.5" stroke="#fff" stroke-width="1.6"/></svg>
+          </div>
+          <h3>Free warehousing</h3>
+          <p>Store your goods with us at no extra cost while your shipment is in transit.</p>
+          <span class="tag">Included, always</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-tag">How it works</span>
+        <h2>Three steps from your door to theirs.</h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-step">
+          <div class="how-num">01<span class="line"></span></div>
+          <h3>Message us</h3>
+          <p>Send a quick DM on WhatsApp with your pickup location and what you're shipping.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-num">02<span class="line"></span></div>
+          <h3>We pick up</h3>
+          <p>A rider or driver collects your package from Ogba, Agege, or anywhere within our reach.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-num">03<span class="line"></span></div>
+          <h3>It gets there</h3>
+          <p>By bike, by road or by air — your delivery arrives on time, tracked end to end.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COVERAGE -->
+  <section id="coverage">
+    <div class="wrap">
+      <div class="coverage">
+        <div class="coverage-visual">
+          <div>
+            <div class="route"><span class="dot"></span>Ogba → Agege, Lagos</div>
+            <div class="route"><span class="dot"></span>Lagos → Interstate Nigeria</div>
+            <div class="route"><span class="dot"></span>Lagos → International</div>
+          </div>
+          <div style="font-size:13.5px; color:rgba(255,255,255,0.6); padding-top:20px;">
+            Based in Ogba, Agege — dispatching by bike, road and air.
+          </div>
+        </div>
+
+        <div>
+          <span class="eyebrow-tag">Why ship with us</span>
+          <h2 style="font-size:clamp(26px,3vw,34px); margin:16px 0 30px;">Built for people who can't afford a late delivery.</h2>
+          <div class="coverage-list">
+            <div class="coverage-item">
+              <div class="num">1</div>
+              <div>
+                <h3>Speed you can plan around</h3>
+                <p>Riders and drivers dispatched fast, so your customers and shipments aren't left waiting.</p>
+              </div>
+            </div>
+            <div class="coverage-item">
+              <div class="num">2</div>
+              <div>
+                <h3>Precision on every route</h3>
+                <p>Whether it's a bike run across Ogba or a container leaving the country, we track it through to delivery.</p>
+              </div>
+            </div>
+            <div class="coverage-item">
+              <div class="num">3</div>
+              <div>
+                <h3>Storage included</h3>
+                <p>Need to hold your goods before the next leg of the journey? Warehousing comes free, not billed extra.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band" id="contact">
+    <div class="wrap cta-inner">
+      <div>
+        <h2>Ready to send something?</h2>
+        <p>Tell us what, where, and when — we'll take care of the rest, starting today.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Send us a DM on WhatsApp</a>
+        <a class="btn btn-outline" href="https://www.instagram.com/transporter.logistics/" target="_blank" rel="noopener">Visit our Instagram</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="brand">
+          <img src="LOGO_IMAGE_SRC" alt="Transporter Logistics logo" style="height:40px;width:40px;">
+          <span class="brand-word">Transporter<span> Logistics</span></span>
+        </a>
+        <p>Reliable logistics and delivery, based in Ogba, Agege, Lagos — moving packages by bike, road and air.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Bike delivery</a></li>
+          <li><a href="#services">Interstate</a></li>
+          <li><a href="#services">International</a></li>
+          <li><a href="#services">Free warehousing</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#coverage">Why choose us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Get in touch</h4>
+        <ul>
+          <li><a href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://www.instagram.com/transporter.logistics/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://maps.app.goo.gl/AoD91MGBxgCE52CE9" target="_blank" rel="noopener">Find us on Maps</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Transporter Logistics. All rights reserved.</span>
+      <span>Ogba, Agege — Lagos, Nigeria</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A8.86 8.86 0 0 0 3.16 16.42L2 21l4.7-1.13a8.86 8.86 0 0 0 4.24 1.08h.01a8.86 8.86 0 0 0 6.65-14.63Z" fill="#fff"/><path d="M9 8.5c.2-.5.4-.5.6-.5h.5c.15 0 .35 0 .5.4.2.5.6 1.5.65 1.6.05.1.1.25 0 .4-.1.15-.15.25-.3.4-.15.15-.3.3-.15.55.15.25.65 1.05 1.4 1.7.95.85 1.7 1.1 1.95 1.25.25.15.4.1.55-.05.15-.15.6-.7.75-.95.15-.25.3-.2.5-.1.2.05 1.3.6 1.5.7.2.1.35.15.4.25.05.1.05.55-.15 1.1-.2.55-1.1 1.05-1.5 1.1-.4.05-.85.1-2.75-.6-2.3-.9-3.8-3.2-3.9-3.35-.1-.15-.85-1.1-.85-2.15 0-1.05.55-1.55.75-1.75Z" fill="#22C35E"/></svg>
+</a>
+
+</body>
+</html>
