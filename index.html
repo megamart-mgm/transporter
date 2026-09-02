@@ -131,9 +131,74 @@
   .nav-links a:hover{ opacity:1; }
   .nav-cta{ display:flex; align-items:center; gap:18px; }
   .nav-cta .phone{ font-size:14px; font-weight:700; color:var(--navy); display:flex; align-items:center; gap:8px;}
+  .nav-cta .btn{ padding:12px 18px; font-size:14px; }
+  .hamburger{
+    display:none;
+    width:42px; height:42px;
+    border:1.5px solid var(--line);
+    border-radius:9px;
+    background:#fff;
+    align-items:center; justify-content:center;
+    flex-shrink:0;
+    cursor:pointer;
+  }
+  .hamburger span{
+    position:relative;
+    width:18px; height:2px; background:var(--navy);
+    display:block;
+  }
+  .hamburger span::before, .hamburger span::after{
+    content:""; position:absolute; left:0; width:18px; height:2px; background:var(--navy); transition:transform .2s;
+  }
+  .hamburger span::before{ top:-6px; }
+  .hamburger span::after{ top:6px; }
+  .mobile-menu{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(12,35,64,0.5);
+    z-index:70;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s;
+  }
+  .mobile-menu.open{ opacity:1; pointer-events:auto; }
+  .mobile-menu-panel{
+    position:absolute;
+    top:0; right:0;
+    width:min(300px, 82vw);
+    height:100%;
+    background:#fff;
+    padding:26px 26px 34px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    transform:translateX(100%);
+    transition:transform .25s ease;
+    box-shadow:-10px 0 30px rgba(0,0,0,0.15);
+  }
+  .mobile-menu.open .mobile-menu-panel{ transform:translateX(0); }
+  .mobile-menu-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+  .mobile-menu-close{
+    width:36px; height:36px; border-radius:8px; border:1.5px solid var(--line); background:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--navy); cursor:pointer;
+  }
+  .mobile-menu a{
+    font-family:'Archivo',sans-serif;
+    font-weight:800;
+    font-size:19px;
+    color:var(--navy);
+    padding:13px 4px;
+    border-bottom:1px solid var(--line);
+  }
+  .mobile-menu .btn{ margin-top:18px; }
+
   @media (max-width:900px){
     .nav-links{ display:none; }
     .nav-cta .phone{ display:none; }
+    .nav-cta .btn-red{ display:none; }
+    .hamburger{ display:flex; }
+    .mobile-menu{ display:block; }
   }
 
   /* ===== HERO ===== */
@@ -582,6 +647,49 @@
     transition:transform .18s ease;
   }
   .wa-float:hover{ transform:scale(1.07); }
+
+  /* ===== GLOBAL MOBILE PASS ===== */
+  @media (max-width:640px){
+    .wrap{ padding:0 20px; }
+    section{ padding:64px 0; }
+    nav.wrap{ height:70px; }
+    .brand img{ height:36px; width:36px; }
+    .brand-word{ font-size:17px; }
+
+    .hero-inner{ padding:56px 20px 0; }
+    .hero h1{ font-size:32px; }
+    .hero p.lede{ font-size:15.5px; }
+    .hero-actions{ gap:12px; }
+    .hero-actions .btn{ width:100%; }
+    .hero-services-strip{ gap:14px 20px; font-size:13px; }
+    .quote-card{ padding:22px; border-radius:14px; }
+    .qc-row{ grid-template-columns:1fr; }
+
+    .section-head{ margin-bottom:36px; }
+    .section-head h2{ font-size:26px; }
+    .section-head p{ font-size:15px; }
+
+    .service-card{ padding:26px 20px; min-height:auto; }
+
+    .coverage-visual{ padding:28px; min-height:auto; }
+
+    .wb-item{ padding:20px; }
+
+    .t-head-row{ flex-direction:column; align-items:flex-start; gap:14px; }
+    .t-card{ padding:22px; }
+
+    .cta-inner{ flex-direction:column; align-items:flex-start; text-align:left; }
+    .cta-actions{ width:100%; }
+    .cta-actions .btn{ width:100%; }
+
+    .contact-info{ padding:32px 22px; }
+    .contact-form{ padding:32px 22px; }
+
+    .foot-grid{ grid-template-columns:1fr; gap:32px; padding-bottom:32px; }
+    .foot-bottom{ flex-direction:column; align-items:flex-start; }
+
+    .wa-float{ width:52px; height:52px; bottom:18px; right:18px; }
+  }
 </style>
 </head>
 <body>
@@ -605,9 +713,25 @@
         Chat on WhatsApp
       </a>
       <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Book a pickup</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><span></span></button>
     </div>
   </nav>
 </header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-panel">
+    <div class="mobile-menu-top">
+      <span class="brand-word">Menu</span>
+      <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
+    </div>
+    <a href="#services">Services</a>
+    <a href="#how">How it works</a>
+    <a href="#why-best">Why us</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Book a pickup</a>
+  </div>
+</div>
 
 <main id="top">
 
@@ -850,47 +974,137 @@
         <div class="t-track" id="tTrack">
           <div class="t-card">
             <span class="t-placeholder-badge">Sample review — add your own</span>
-            <div class="t-stars">
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-            </div>
-            <p>Replace this with a real quote from a customer once your first Google reviews come in.</p>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A quick line about a same-day bike delivery going smoothly across Lagos.</p>
             <div class="t-person">
-              <div class="t-avatar">＋</div>
-              <div><div class="name">Your customer's name</div><div class="role">Service used</div></div>
+              <div class="t-avatar">AB</div>
+              <div><div class="name">A. Balogun (sample)</div><div class="role">Bike delivery</div></div>
             </div>
           </div>
           <div class="t-card">
             <span class="t-placeholder-badge">Sample review — add your own</span>
-            <div class="t-stars">
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-            </div>
-            <p>This carousel is wired up and animated — swap in real names, ratings and quotes as they arrive.</p>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A note about an interstate shipment arriving on schedule and in good condition.</p>
             <div class="t-person">
-              <div class="t-avatar">＋</div>
-              <div><div class="name">Your customer's name</div><div class="role">Service used</div></div>
+              <div class="t-avatar">TA</div>
+              <div><div class="name">T. Adewale (sample)</div><div class="role">Interstate</div></div>
             </div>
           </div>
           <div class="t-card">
             <span class="t-placeholder-badge">Sample review — add your own</span>
-            <div class="t-stars">
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg>
-            </div>
-            <p>Google reviews for this listing weren't available to pull in automatically yet — this space is ready for them.</p>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A comment on a straightforward international shipping experience.</p>
             <div class="t-person">
-              <div class="t-avatar">＋</div>
-              <div><div class="name">Your customer's name</div><div class="role">Service used</div></div>
+              <div class="t-avatar">CN</div>
+              <div><div class="name">C. Nwosu (sample)</div><div class="role">International</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A mention of goods being safely stored between the two legs of a delivery.</p>
+            <div class="t-person">
+              <div class="t-avatar">FY</div>
+              <div><div class="name">F. Yusuf (sample)</div><div class="role">Warehousing</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A quick word on how easy it was to book a pickup over WhatsApp.</p>
+            <div class="t-person">
+              <div class="t-avatar">OE</div>
+              <div><div class="name">O. Eze (sample)</div><div class="role">Bike delivery</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A reflection on responsive updates while a shipment was in transit.</p>
+            <div class="t-person">
+              <div class="t-avatar">BO</div>
+              <div><div class="name">B. Okonkwo (sample)</div><div class="role">Interstate</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A short line about free storage taking one less cost off a shipment.</p>
+            <div class="t-person">
+              <div class="t-avatar">SA</div>
+              <div><div class="name">S. Adeyemi (sample)</div><div class="role">Warehousing</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A note on cross-border paperwork being handled without back-and-forth.</p>
+            <div class="t-person">
+              <div class="t-avatar">MI</div>
+              <div><div class="name">M. Ibrahim (sample)</div><div class="role">International</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A comment on a rider arriving quickly for an urgent document run.</p>
+            <div class="t-person">
+              <div class="t-avatar">RC</div>
+              <div><div class="name">R. Chukwu (sample)</div><div class="role">Bike delivery</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A mention of a bulky item making it upcountry without damage.</p>
+            <div class="t-person">
+              <div class="t-avatar">KF</div>
+              <div><div class="name">K. Fashola (sample)</div><div class="role">Interstate</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A line about consistent, dependable service on repeat local errands.</p>
+            <div class="t-person">
+              <div class="t-avatar">DO</div>
+              <div><div class="name">D. Okafor (sample)</div><div class="role">Bike delivery</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A note on being kept informed at each stage of an overseas shipment.</p>
+            <div class="t-person">
+              <div class="t-avatar">PB</div>
+              <div><div class="name">P. Bello (sample)</div><div class="role">International</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A comment on how convenient it was to hold stock before redistribution.</p>
+            <div class="t-person">
+              <div class="t-avatar">NU</div>
+              <div><div class="name">N. Uche (sample)</div><div class="role">Warehousing</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A short line about fair pricing on a multi-state delivery.</p>
+            <div class="t-person">
+              <div class="t-avatar">JA</div>
+              <div><div class="name">J. Aliyu (sample)</div><div class="role">Interstate</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <span class="t-placeholder-badge">Sample review — add your own</span>
+            <div class="t-stars"><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg><svg viewBox="0 0 20 20" fill="#F4B400"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.2L10 14.9 4.4 18l1.4-6.2L1 7.5l6.4-.6L10 1Z"/></svg></div>
+            <p>A mention of friendly, professional riders handling a fragile package.</p>
+            <div class="t-person">
+              <div class="t-avatar">LO</div>
+              <div><div class="name">L. Ogundele (sample)</div><div class="role">Bike delivery</div></div>
             </div>
           </div>
         </div>
@@ -1036,6 +1250,17 @@
 </a>
 
 <script>
+  // Mobile menu
+  (function(){
+    const menu = document.getElementById('mobileMenu');
+    const openBtn = document.getElementById('hamburgerBtn');
+    const closeBtn = document.getElementById('mobileMenuClose');
+    openBtn.addEventListener('click', () => menu.classList.add('open'));
+    closeBtn.addEventListener('click', () => menu.classList.remove('open'));
+    menu.addEventListener('click', (e) => { if(e.target === menu) menu.classList.remove('open'); });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+  })();
+
   // Testimonials carousel
   (function(){
     const track = document.getElementById('tTrack');
