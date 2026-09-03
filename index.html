@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Transporter Logistics — Bike, Interstate &amp; International Delivery in Lagos</title>
+<title>Transporter Logistics — Delivery &amp; Travel Services in Lagos</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;0,800;0,900;1,800&family=Manrope:wght@400;500;600;700;800&display=swap');
 
@@ -690,6 +690,84 @@
 
     .wa-float{ width:52px; height:52px; bottom:18px; right:18px; }
   }
+
+  /* ===== BOOKING SERVICES ===== */
+  .booking-services{ padding:96px 0; background:var(--paper-2); }
+  .booking-services-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-top:34px;
+  }
+  .booking-service-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    min-height:190px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .booking-service-card:hover{ transform:translateY(-3px); border-color:rgba(224,30,38,.35); box-shadow:0 12px 28px rgba(12,35,64,.08); }
+  .booking-service-icon{ font-size:30px; margin-bottom:16px; }
+  .booking-service-card h3{ font-size:18px; margin-bottom:6px; }
+  .booking-service-card p{ color:var(--slate); font-size:13.5px; line-height:1.55; }
+  .booking-service-card span{ margin-top:auto; padding-top:18px; color:var(--red); font-size:13px; font-weight:800; }
+  .booking-services-cta{ display:flex; justify-content:center; margin-top:28px; }
+
+  /* ===== RESPONSIVE NAV / HERO ===== */
+  @media (max-width:1180px){
+    .nav-links{ gap:20px; }
+    .nav-links a{ font-size:13.5px; }
+    .nav-cta{ gap:10px; }
+    .nav-cta .phone{ font-size:12.5px; }
+    .nav-cta .btn{ padding:11px 14px; font-size:13px; }
+  }
+  @media (max-width:1040px){
+    nav.wrap{ height:76px; }
+    .brand-word{ font-size:18px; }
+    .brand img{ width:40px; height:40px; }
+    .nav-links{ gap:14px; }
+    .nav-links a{ font-size:12.5px; }
+    .nav-cta .phone{ display:none; }
+  }
+  @media (max-width:900px){
+    nav.wrap{ height:70px; }
+    .wrap{ padding-left:20px; padding-right:20px; }
+    .brand{ min-width:0; }
+    .brand-word{ font-size:17px; white-space:nowrap; }
+    .nav-cta{ margin-left:auto; }
+    .hamburger{ display:flex; }
+    .nav-cta .btn-red{ display:none; }
+    .mobile-menu-panel{ width:min(340px,88vw); padding:22px 22px 30px; overflow-y:auto; }
+    .mobile-menu a{ font-size:17px; padding:12px 2px; }
+    .mobile-menu .btn{ width:100%; margin-top:14px; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-services-strip{ flex-wrap:wrap; gap:10px 18px; }
+    .booking-services-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:600px){
+    .brand img{ width:38px; height:38px; }
+    .brand-word{ font-size:15.5px; }
+    .hero-services-strip{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .hero-services-strip li{ font-size:12px; }
+    .booking-services{ padding:70px 0; }
+    .booking-services-grid{ grid-template-columns:1fr; gap:12px; margin-top:26px; }
+    .booking-service-card{ min-height:0; padding:18px; display:grid; grid-template-columns:auto 1fr; column-gap:14px; }
+    .booking-service-icon{ grid-row:1 / span 2; margin:0; font-size:27px; }
+    .booking-service-card span{ grid-column:2; padding-top:10px; }
+  }
+  @media (max-width:420px){
+    .wrap{ padding-left:16px; padding-right:16px; }
+    nav.wrap{ height:66px; }
+    .brand{ gap:8px; }
+    .brand img{ width:34px; height:34px; border-radius:7px; }
+    .brand-word{ font-size:14px; }
+    .hamburger{ width:40px; height:40px; }
+    .hero-services-strip{ grid-template-columns:1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -702,10 +780,11 @@
     </a>
     <div class="nav-links">
       <a href="#services">Services</a>
-      <a href="#how">How it works</a>
+      <a href="book.html">Buses</a>
+      <a href="book.html">Flights</a>
+      <a href="book.html">Car Rentals</a>
+      <a href="book.html">Train</a>
       <a href="about.html">About</a>
-      <a href="#why-best">Why us</a>
-      <a href="#testimonials">Reviews</a>
       <a href="contact.html">Contact</a>
     </div>
     <div class="nav-cta">
@@ -713,7 +792,7 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A8.86 8.86 0 0 0 3.16 16.42L2 21l4.7-1.13a8.86 8.86 0 0 0 4.24 1.08h.01a8.86 8.86 0 0 0 6.65-14.63Z" stroke="#0C2340" stroke-width="1.6"/></svg>
         Chat on WhatsApp
       </a>
-      <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Book a pickup</a>
+      <a class="btn btn-red" href="book.html">Book Services Today</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><span></span></button>
     </div>
   </nav>
@@ -726,12 +805,15 @@
       <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
     </div>
     <a href="#services">Services</a>
-    <a href="#how">How it works</a>
+    <a href="book.html">Buses</a>
+    <a href="book.html">Flights</a>
+    <a href="book.html">Car Rentals</a>
+    <a href="book.html">Train</a>
     <a href="about.html">About</a>
     <a href="#why-best">Why us</a>
     <a href="#testimonials">Reviews</a>
     <a href="contact.html">Contact</a>
-    <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Book a pickup</a>
+    <a class="btn btn-red" href="book.html">Book Services Today</a>
   </div>
 </div>
 
@@ -745,23 +827,27 @@
       <div class="hero-grid">
         <div>
           <span class="eyebrow-tag">● Serving Ogba &amp; Agege, Lagos</span>
-          <h1>Your delivery,<br>handled with <em>speed</em><br>and precision.</h1>
-          <p class="lede">Transporter Logistics moves your packages by bike across Lagos, by road across states, and by air across borders — with free warehousing while you wait.</p>
+          <h1>Delivery, travel &amp; bookings,<br>handled with <em>speed</em><br>and precision.</h1>
+          <p class="lede">Transporter Logistics is more than delivery. Send packages by bike, road or air, and book buses, flights, car rentals or train travel — all through one dependable partner.</p>
           <div class="hero-actions">
             <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Send us a DM on WhatsApp</a>
-            <a class="btn btn-outline" href="#services">See our services</a>
+            <a class="btn btn-outline" href="book.html">Book Services Today</a>
           </div>
           <ul class="hero-services-strip">
             <li>🏍️ Bike delivery</li>
             <li>🚚 Interstate haulage</li>
             <li>🌎 International shipping</li>
+            <li>🚌 Bus bookings</li>
+            <li>✈️ Flight bookings</li>
+            <li>🚗 Car rentals</li>
+            <li>🚆 Train bookings</li>
             <li>🏭 Free warehousing</li>
           </ul>
         </div>
 
         <div class="quote-card">
-          <h3>Request a pickup</h3>
-          <div class="sub">Tell us what you're sending — we'll take it from there.</div>
+          <h3>Book Services Today</h3>
+          <div class="sub">Delivery, buses, flights, car rentals and train travel — choose what you need and book in a few steps.</div>
           <div class="qc-row">
             <div class="qc-field">
               <label>Pickup area</label>
@@ -787,8 +873,8 @@
               <input type="date">
             </div>
           </div>
-          <a class="btn btn-navy" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Get a quote on WhatsApp →</a>
-          <div class="note">No account needed — we reply on WhatsApp in minutes.</div>
+          <a class="btn btn-navy" href="book.html">Book Services Today →</a>
+          <div class="note">Choose your service, add your details and we'll confirm your booking on WhatsApp.</div>
         </div>
       </div>
     </div>
@@ -799,9 +885,9 @@
   <section id="services">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow-tag">What we move</span>
-        <h2>Four ways to ship, one dependable partner.</h2>
-        <p>From a same-day envelope across Ogba to a container crossing a border, pick the lane that fits — we handle the rest.</p>
+        <span class="eyebrow-tag">What we offer</span>
+        <h2>Delivery and travel services, one dependable partner.</h2>
+        <p>Send what you need delivered or book the travel service you need. Transporter Logistics brings both delivery and movement bookings together in one place.</p>
       </div>
 
       <div class="services-grid">
@@ -840,6 +926,44 @@
           <p>Store your goods with us at no extra cost while your shipment is in transit.</p>
           <span class="tag">Included, always</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING SERVICES -->
+  <section class="booking-services" id="booking-services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-tag">More than delivery</span>
+        <h2>Book your next trip or service with us.</h2>
+        <p>Need a bus, flight, car rental or train? You can book those services through the same Transporter Logistics booking page.</p>
+      </div>
+
+      <div class="booking-services-grid">
+        <a class="booking-service-card" href="book.html">
+          <div class="booking-service-icon">🚌</div>
+          <div><h3>Bus bookings</h3><p>Plan your route, travel date and passenger details.</p></div>
+          <span>Book now →</span>
+        </a>
+        <a class="booking-service-card" href="book.html">
+          <div class="booking-service-icon">✈️</div>
+          <div><h3>Flight bookings</h3><p>Choose your departure, arrival, date and class.</p></div>
+          <span>Book now →</span>
+        </a>
+        <a class="booking-service-card" href="book.html">
+          <div class="booking-service-icon">🚗</div>
+          <div><h3>Car rentals</h3><p>Select your pickup, car type and return date.</p></div>
+          <span>Book now →</span>
+        </a>
+        <a class="booking-service-card" href="book.html">
+          <div class="booking-service-icon">🚆</div>
+          <div><h3>Train bookings</h3><p>Set your stations, travel date and preferred class.</p></div>
+          <span>Book now →</span>
+        </a>
+      </div>
+
+      <div class="booking-services-cta">
+        <a class="btn btn-red" href="book.html">Book Services Today →</a>
       </div>
     </div>
   </section>
