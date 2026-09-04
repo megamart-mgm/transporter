@@ -159,6 +159,9 @@
   .field textarea{ resize:vertical; }
   @media (max-width:640px){ .field-row{ grid-template-columns:1fr; } .form-card{ padding:24px; } }
 
+  .field-group-title{ font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; color:var(--orange); margin:20px 0 10px; }
+  .field-group-title:first-child{ margin-top:0; }
+
   .form-foot{
     display:flex; align-items:center; justify-content:space-between; gap:16px;
     margin-top:26px; padding-top:22px; border-top:1px solid var(--line); flex-wrap:wrap;
@@ -261,11 +264,9 @@
       <span class="brand-word">Transporter<span> Logistics</span></span>
     </a>
     <div class="nav-links">
-      <a href="index.html#services">Deliveries</a>
-      <a href="book.html" class="current">Buses</a>
-      <a href="book.html">Flights</a>
-      <a href="book.html">Car Rentals</a>
-      <a href="index.html#about">About</a>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </div>
     <div class="nav-cta">
     
@@ -329,14 +330,58 @@
           <div class="form-card">
             <h2 id="formTitle">Delivery Logistics</h2>
 
-            <div class="field-row">
+            <div class="field-row" id="genericLocationRow">
               <div class="field">
                 <label id="originLabel">Pickup location</label>
                 <input type="text" id="originInput" placeholder="Enter pickup city" required>
+                <select id="originSelect" style="display:none;" required></select>
               </div>
               <div class="field">
                 <label id="destLabel">Delivery destination</label>
                 <input type="text" id="destInput" placeholder="Enter delivery destination" required>
+                <select id="destSelect" style="display:none;" required></select>
+              </div>
+            </div>
+
+            <div id="deliveryDetailFields" style="display:none;">
+              <div class="field-group-title">Pickup details</div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="pickupName">Name</label>
+                  <input type="text" id="pickupName" placeholder="Pickup contact name">
+                </div>
+                <div class="field">
+                  <label for="pickupNumber">Number</label>
+                  <input type="tel" id="pickupNumber" placeholder="Pickup phone number">
+                </div>
+              </div>
+              <div class="field-row full">
+                <div class="field">
+                  <label for="pickupAddress">Address</label>
+                  <input type="text" id="pickupAddress" placeholder="Pickup address">
+                </div>
+              </div>
+
+              <div class="field-group-title">Destination details</div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="destContactName">Name</label>
+                  <input type="text" id="destContactName" placeholder="Recipient name">
+                </div>
+                <div class="field">
+                  <label for="destContactNumber">Number</label>
+                  <input type="tel" id="destContactNumber" placeholder="Recipient phone number">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="destContactAddress">Address</label>
+                  <input type="text" id="destContactAddress" placeholder="Destination address">
+                </div>
+                <div class="field">
+                  <label for="destContactEmail">Email (optional)</label>
+                  <input type="email" id="destContactEmail" placeholder="recipient@email.com">
+                </div>
               </div>
             </div>
 
@@ -365,8 +410,20 @@
                 <input type="number" id="extra2Input" min="0" placeholder="e.g. 5">
                 <select id="extra2Select" style="display:none;"></select>
               </div>
+              <div class="field" id="extra3Field" style="display:none;">
+                <label id="extra3Label">Delivery type</label>
+                <select id="extra3Select">
+                  <option>Within Lagos</option>
+                  <option>Interstate</option>
+                  <option>International</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row full" id="itemDescRow" style="display:none;">
               <div class="field">
-                <!-- spacer / reserved for symmetry -->
+                <label for="itemDescription">Item description</label>
+                <textarea id="itemDescription" rows="3" placeholder="Briefly describe the item(s) being sent"></textarea>
               </div>
             </div>
 
@@ -380,12 +437,27 @@
         <!-- STEP 2 -->
         <div class="step-panel" id="panel-2">
           <div class="form-card">
-            <h2>Your Details &amp; Logistics</h2>
+            <h2>Passenger Details</h2>
 
             <div class="field-row">
               <div class="field">
-                <label for="fullName">Full name</label>
-                <input type="text" id="fullName" placeholder="Your name" required>
+                <label for="title">Title</label>
+                <select id="title">
+                  <option>Mr</option>
+                  <option>Mrs</option>
+                  <option>Miss</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="firstName">First name</label>
+                <input type="text" id="firstName" placeholder="First name" required>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="lastName">Last name</label>
+                <input type="text" id="lastName" placeholder="Last name" required>
               </div>
               <div class="field">
                 <label for="phone">Phone number (WhatsApp)</label>
@@ -399,6 +471,34 @@
                 <input type="email" id="email" placeholder="you@email.com">
               </div>
               <div class="field">
+                <label for="gender">Gender</label>
+                <select id="gender">
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="dob">Date of birth</label>
+                <input type="date" id="dob">
+              </div>
+              <div class="field">
+                <label for="nationality">Nationality</label>
+                <input type="text" id="nationality" placeholder="e.g. Nigerian">
+              </div>
+            </div>
+
+            <div class="field-row full">
+              <div class="field">
+                <label for="ninNumber">NIN number</label>
+                <input type="text" id="ninNumber" placeholder="National Identification Number">
+              </div>
+            </div>
+
+            <div class="field-row full">
+              <div class="field">
                 <label for="contactPref">Preferred contact time</label>
                 <select id="contactPref">
                   <option>Anytime</option>
@@ -406,6 +506,24 @@
                   <option>Afternoon</option>
                   <option>Evening</option>
                 </select>
+              </div>
+            </div>
+
+            <div class="field-group-title">Next of kin details</div>
+            <div class="field-row">
+              <div class="field">
+                <label for="kinFirstName">First name</label>
+                <input type="text" id="kinFirstName" placeholder="Next of kin first name">
+              </div>
+              <div class="field">
+                <label for="kinLastName">Last name</label>
+                <input type="text" id="kinLastName" placeholder="Next of kin last name">
+              </div>
+            </div>
+            <div class="field-row full">
+              <div class="field">
+                <label for="kinPhone">Phone number (optional)</label>
+                <input type="tel" id="kinPhone" placeholder="Next of kin phone number">
               </div>
             </div>
 
@@ -498,16 +616,15 @@
   const modeConfig = {
     delivery: {
       title: "Delivery Logistics",
-      origin: "Pickup location", originPh: "Enter pickup city",
-      dest: "Delivery destination", destPh: "Enter delivery destination",
+      isDelivery: true,
       date: "Pickup date",
-      extraType: "select", extraLabel: "Cargo type",
+      extraLabel: "Cargo type",
       extraOptions: ["General Freight","Documents","Fragile Goods","Electronics","Furniture","Perishables"],
-      extra2Type: "number", extra2Label: "Estimated weight (kg)", extra2Ph: "e.g. 5"
+      extra2Label: "Estimated weight (kg)", extra2Ph: "e.g. 5"
     },
     bus: {
       title: "Bus Booking",
-      origin: "Boarding city", originPh: "Enter boarding city",
+      origin: "Departure city", originPh: "Enter departure city",
       dest: "Destination city", destPh: "Enter destination city",
       date: "Travel date",
       extraType: "number", extraLabel: "Number of passengers", extraPh: "e.g. 2",
@@ -516,12 +633,36 @@
     },
     flight: {
       title: "Flight Booking",
-      origin: "Departure city", originPh: "Enter departure city",
-      dest: "Arrival city", destPh: "Enter arrival city",
+      origin: "Departure airport", originPh: "Select departure airport",
+      dest: "Destination airport", destPh: "Select destination airport",
+      isAirportDropdown: true,
+      airportOptions: [
+        "Abuja (ABV)",
+        "Akure (AKR)",
+        "Akwa Ibom (QUO)",
+        "Anambra (ANA)",
+        "Asaba (ABB)",
+        "Benin (BNI)",
+        "Calabar (CBQ)",
+        "Ekiti (EKK)",
+        "Enugu (ENU)",
+        "Ilorin (ILR)",
+        "Ibadan (IBA)",
+        "Jos (JOS)",
+        "Kano (KAN)",
+        "Kaduna (KAD)",
+        "Lagos (LOS)",
+        "Niger (MXJ)",
+        "Owerri (QOW)",
+        "Port Harcourt (PHC)",
+        "Sokoto (SKO)",
+        "Warri (QRW)",
+        "Yenagoa (BIA)"
+      ],
       date: "Departure date",
       extraType: "number", extraLabel: "Number of passengers", extraPh: "e.g. 1",
       extra2Type: "select", extra2Label: "Class",
-      extra2Options: ["Economy","Business","First Class"]
+      extra2Options: ["Economy","Premium Economy","Business","First Class"]
     },
     car: {
       title: "Car Rental",
@@ -534,12 +675,24 @@
     },
     train: {
       title: "Train Booking",
-      origin: "Departure station", originPh: "Enter departure station",
-      dest: "Arrival station", destPh: "Enter arrival station",
+      origin: "Departure station", originPh: "Select departure station",
+      dest: "Arrival station", destPh: "Select arrival station",
+      isAirportDropdown: true,
+      airportOptions: [
+        "Mobolaji Johnson Station Ebute Metta",
+        "Babatunde Raji Fashola Station Agege",
+        "Lateef Kayode Jakande Station Agbado",
+        "Professor Yemi Oshinbajo Station Kajola",
+        "Olu Funmilavo Ransome Kuti Papalanto",
+        "Professor Wole Soyinka Station Abeokuta",
+        "Aremo Olusegun Osoba Olodo",
+        "Ladoke Akintola Station Omi-Adio",
+        "Obafemi Awolowo Station Moniya"
+      ],
       date: "Travel date",
       extraType: "number", extraLabel: "Number of passengers", extraPh: "e.g. 1",
       extra2Type: "select", extra2Label: "Class",
-      extra2Options: ["Standard","First Class","Sleeper"]
+      extra2Options: ["Standard","Business","First Class"]
     }
   };
 
@@ -547,10 +700,13 @@
 
   const modeTabs = document.querySelectorAll(".mode-tab");
   const formTitle = document.getElementById("formTitle");
+  const genericLocationRow = document.getElementById("genericLocationRow");
   const originLabel = document.getElementById("originLabel");
   const originInput = document.getElementById("originInput");
+  const originSelect = document.getElementById("originSelect");
   const destLabel = document.getElementById("destLabel");
   const destInput = document.getElementById("destInput");
+  const destSelect = document.getElementById("destSelect");
   const dateLabel = document.getElementById("dateLabel");
   const extraLabel = document.getElementById("extraLabel");
   const extraSelect = document.getElementById("extraSelect");
@@ -559,44 +715,113 @@
   const extra2Input = document.getElementById("extra2Input");
   const extra2Select = document.getElementById("extra2Select");
 
+  const deliveryDetailFields = document.getElementById("deliveryDetailFields");
+  const extra3Field = document.getElementById("extra3Field");
+  const itemDescRow = document.getElementById("itemDescRow");
+  const pickupName = document.getElementById("pickupName");
+  const pickupNumber = document.getElementById("pickupNumber");
+  const pickupAddress = document.getElementById("pickupAddress");
+  const destContactName = document.getElementById("destContactName");
+  const destContactNumber = document.getElementById("destContactNumber");
+  const destContactAddress = document.getElementById("destContactAddress");
+  const destContactEmail = document.getElementById("destContactEmail");
+  const extra3Select = document.getElementById("extra3Select");
+  const itemDescription = document.getElementById("itemDescription");
+
   function applyMode(mode){
     currentMode = mode;
     const cfg = modeConfig[mode];
     formTitle.textContent = cfg.title;
-    originLabel.textContent = cfg.origin;
-    originInput.placeholder = cfg.originPh;
-    destLabel.textContent = cfg.dest;
-    destInput.placeholder = cfg.destPh;
     dateLabel.textContent = cfg.date;
 
-    extraLabel.textContent = cfg.extraLabel;
-    if(cfg.extraType === "select"){
+    if(cfg.isDelivery){
+      // Delivery gets its own detailed field set instead of the generic origin/dest inputs
+      genericLocationRow.style.display = "none";
+      originInput.required = false;
+      destInput.required = false;
+
+      deliveryDetailFields.style.display = "";
+      extra3Field.style.display = "";
+      itemDescRow.style.display = "";
+
+      extraLabel.textContent = cfg.extraLabel;
       extraSelect.style.display = "";
       extraNumber.style.display = "none";
       extraSelect.innerHTML = cfg.extraOptions.map(o => `<option>${o}</option>`).join("");
-    } else {
-      extraSelect.style.display = "none";
-      extraNumber.style.display = "";
-      extraNumber.placeholder = cfg.extraPh || "";
-      extraNumber.value = "";
-    }
 
-    extra2Label.textContent = cfg.extra2Label;
-    if(cfg.extra2Type === "select"){
-      extra2Select.style.display = "";
-      extra2Input.style.display = "none";
-      extra2Select.innerHTML = cfg.extra2Options.map(o => `<option>${o}</option>`).join("");
-    } else if(cfg.extra2Type === "date"){
-      extra2Input.style.display = "";
-      extra2Select.style.display = "none";
-      extra2Input.type = "date";
-      extra2Input.value = "";
-    } else {
+      extra2Label.textContent = cfg.extra2Label;
       extra2Input.style.display = "";
       extra2Select.style.display = "none";
       extra2Input.type = "number";
       extra2Input.placeholder = cfg.extra2Ph || "";
       extra2Input.value = "";
+    } else {
+      genericLocationRow.style.display = "";
+      originInput.required = true;
+      destInput.required = true;
+
+      deliveryDetailFields.style.display = "none";
+      extra3Field.style.display = "none";
+      itemDescRow.style.display = "none";
+
+      originLabel.textContent = cfg.origin;
+      destLabel.textContent = cfg.dest;
+
+      if(cfg.isAirportDropdown){
+        originInput.style.display = "none";
+        originInput.required = false;
+        originSelect.style.display = "";
+        originSelect.required = true;
+        originSelect.innerHTML = cfg.airportOptions.map(o => `<option>${o}</option>`).join("");
+
+        destInput.style.display = "none";
+        destInput.required = false;
+        destSelect.style.display = "";
+        destSelect.required = true;
+        destSelect.innerHTML = cfg.airportOptions.map(o => `<option>${o}</option>`).join("");
+      } else {
+        originInput.style.display = "";
+        originInput.required = true;
+        originInput.placeholder = cfg.originPh;
+        originSelect.style.display = "none";
+        originSelect.required = false;
+
+        destInput.style.display = "";
+        destInput.required = true;
+        destInput.placeholder = cfg.destPh;
+        destSelect.style.display = "none";
+        destSelect.required = false;
+      }
+
+      extraLabel.textContent = cfg.extraLabel;
+      if(cfg.extraType === "select"){
+        extraSelect.style.display = "";
+        extraNumber.style.display = "none";
+        extraSelect.innerHTML = cfg.extraOptions.map(o => `<option>${o}</option>`).join("");
+      } else {
+        extraSelect.style.display = "none";
+        extraNumber.style.display = "";
+        extraNumber.placeholder = cfg.extraPh || "";
+        extraNumber.value = "";
+      }
+
+      extra2Label.textContent = cfg.extra2Label;
+      if(cfg.extra2Type === "select"){
+        extra2Select.style.display = "";
+        extra2Input.style.display = "none";
+        extra2Select.innerHTML = cfg.extra2Options.map(o => `<option>${o}</option>`).join("");
+      } else if(cfg.extra2Type === "date"){
+        extra2Input.style.display = "";
+        extra2Select.style.display = "none";
+        extra2Input.type = "date";
+        extra2Input.value = "";
+      } else {
+        extra2Input.style.display = "";
+        extra2Select.style.display = "none";
+        extra2Input.type = "number";
+        extra2Input.placeholder = cfg.extra2Ph || "";
+        extra2Input.value = "";
+      }
     }
 
     modeTabs.forEach(t => t.classList.toggle("active", t.dataset.mode === mode));
@@ -606,12 +831,23 @@
     tab.addEventListener("click", () => applyMode(tab.dataset.mode));
   });
 
+  function getOriginValue(){
+    const cfg = modeConfig[currentMode];
+    return cfg.isAirportDropdown ? originSelect.value : originInput.value;
+  }
+  function getDestValue(){
+    const cfg = modeConfig[currentMode];
+    return cfg.isAirportDropdown ? destSelect.value : destInput.value;
+  }
+
   function getExtraValue(){
     const cfg = modeConfig[currentMode];
+    if(cfg.isDelivery) return extraSelect.value;
     return cfg.extraType === "select" ? extraSelect.value : extraNumber.value;
   }
   function getExtra2Value(){
     const cfg = modeConfig[currentMode];
+    if(cfg.isDelivery) return extra2Input.value;
     return cfg.extra2Type === "select" ? extra2Select.value : extra2Input.value;
   }
 
@@ -630,11 +866,28 @@
   }
 
   document.getElementById("toStep2").addEventListener("click", () => {
-    if(!originInput.value || !destInput.value || !dateInput.value){
-      originInput.reportValidity();
-      destInput.reportValidity();
-      dateInput.reportValidity();
-      return;
+    if(modeConfig[currentMode].isDelivery){
+      if(!pickupName.value || !pickupNumber.value || !pickupAddress.value ||
+         !destContactName.value || !destContactNumber.value || !destContactAddress.value ||
+         !dateInput.value){
+        pickupName.reportValidity();
+        pickupNumber.reportValidity();
+        pickupAddress.reportValidity();
+        destContactName.reportValidity();
+        destContactNumber.reportValidity();
+        destContactAddress.reportValidity();
+        dateInput.reportValidity();
+        return;
+      }
+    } else {
+      if(!getOriginValue() || !getDestValue() || !dateInput.value){
+        if(!modeConfig[currentMode].isAirportDropdown){
+          originInput.reportValidity();
+          destInput.reportValidity();
+        }
+        dateInput.reportValidity();
+        return;
+      }
     }
     goToStep(2);
   });
@@ -642,10 +895,12 @@
   document.getElementById("backTo1").addEventListener("click", () => goToStep(1));
 
   document.getElementById("toStep3").addEventListener("click", () => {
-    const fullName = document.getElementById("fullName");
+    const firstNameEl = document.getElementById("firstName");
+    const lastNameEl = document.getElementById("lastName");
     const phone = document.getElementById("phone");
-    if(!fullName.value || !phone.value){
-      fullName.reportValidity();
+    if(!firstNameEl.value || !lastNameEl.value || !phone.value){
+      firstNameEl.reportValidity();
+      lastNameEl.reportValidity();
       phone.reportValidity();
       return;
     }
@@ -658,22 +913,52 @@
   function buildSummary(){
     const cfg = modeConfig[currentMode];
     const dateInputEl = document.getElementById("dateInput");
+    let routeRows;
 
-    const routeRows = [
-      ["Service", cfg.title],
-      [cfg.origin, originInput.value],
-      [cfg.dest, destInput.value],
-      [cfg.date, dateInputEl.value],
-      [cfg.extraLabel, getExtraValue() || "—"],
-      [cfg.extra2Label, getExtra2Value() || "—"]
-    ];
+    if(cfg.isDelivery){
+      routeRows = [
+        ["Service", cfg.title],
+        ["Delivery type", extra3Select.value],
+        ["Pickup name", pickupName.value],
+        ["Pickup number", pickupNumber.value],
+        ["Pickup address", pickupAddress.value],
+        ["Destination name", destContactName.value],
+        ["Destination number", destContactNumber.value],
+        ["Destination address", destContactAddress.value],
+        ["Destination email", destContactEmail.value || "—"],
+        [cfg.date, dateInputEl.value],
+        [cfg.extraLabel, getExtraValue() || "—"],
+        [cfg.extra2Label, getExtra2Value() || "—"],
+        ["Item description", itemDescription.value || "—"]
+      ];
+    } else {
+      routeRows = [
+        ["Service", cfg.title],
+        [cfg.origin, getOriginValue()],
+        [cfg.dest, getDestValue()],
+        [cfg.date, dateInputEl.value],
+        [cfg.extraLabel, getExtraValue() || "—"],
+        [cfg.extra2Label, getExtra2Value() || "—"]
+      ];
+    }
 
     const notes = document.getElementById("notes").value;
+    const kinFirst = document.getElementById("kinFirstName").value;
+    const kinLast = document.getElementById("kinLastName").value;
+    const kinPhone = document.getElementById("kinPhone").value;
     const contactRows = [
-      ["Full name", document.getElementById("fullName").value],
+      ["Title", document.getElementById("title").value],
+      ["First name", document.getElementById("firstName").value],
+      ["Last name", document.getElementById("lastName").value],
       ["Phone", document.getElementById("phone").value],
       ["Email", document.getElementById("email").value || "—"],
+      ["Gender", document.getElementById("gender").value],
+      ["Date of birth", document.getElementById("dob").value || "—"],
+      ["Nationality", document.getElementById("nationality").value || "—"],
+      ["NIN number", document.getElementById("ninNumber").value || "—"],
       ["Preferred contact time", document.getElementById("contactPref").value],
+      ["Next of kin", (kinFirst || kinLast) ? `${kinFirst} ${kinLast}`.trim() : "—"],
+      ["Next of kin phone", kinPhone || "—"],
       ["Notes", notes || "—"]
     ];
 
@@ -699,16 +984,46 @@
     const dateInputEl = document.getElementById("dateInput");
 
     let text = `Hi Transporter Logistics, I'd like to book: ${cfg.title}\n\n`;
-    text += `${cfg.origin}: ${originInput.value}\n`;
-    text += `${cfg.dest}: ${destInput.value}\n`;
-    text += `${cfg.date}: ${dateInputEl.value}\n`;
-    text += `${cfg.extraLabel}: ${getExtraValue() || "—"}\n`;
-    text += `${cfg.extra2Label}: ${getExtra2Value() || "—"}\n\n`;
-    text += `Name: ${document.getElementById("fullName").value}\n`;
+
+    if(cfg.isDelivery){
+      text += `Delivery type: ${extra3Select.value}\n\n`;
+      text += `Pickup — Name: ${pickupName.value}, Number: ${pickupNumber.value}, Address: ${pickupAddress.value}\n`;
+      text += `Destination — Name: ${destContactName.value}, Number: ${destContactNumber.value}, Address: ${destContactAddress.value}`;
+      if(destContactEmail.value) text += `, Email: ${destContactEmail.value}`;
+      text += `\n`;
+      text += `${cfg.date}: ${dateInputEl.value}\n`;
+      text += `${cfg.extraLabel}: ${getExtraValue() || "—"}\n`;
+      text += `${cfg.extra2Label}: ${getExtra2Value() || "—"}\n`;
+      if(itemDescription.value) text += `Item description: ${itemDescription.value}\n`;
+      text += `\n`;
+    } else {
+      text += `${cfg.origin}: ${getOriginValue()}\n`;
+      text += `${cfg.dest}: ${getDestValue()}\n`;
+      text += `${cfg.date}: ${dateInputEl.value}\n`;
+      text += `${cfg.extraLabel}: ${getExtraValue() || "—"}\n`;
+      text += `${cfg.extra2Label}: ${getExtra2Value() || "—"}\n\n`;
+    }
+
+    text += `Name: ${document.getElementById("title").value} ${document.getElementById("firstName").value} ${document.getElementById("lastName").value}\n`;
     text += `Phone: ${document.getElementById("phone").value}\n`;
     const email = document.getElementById("email").value;
     if(email) text += `Email: ${email}\n`;
+    text += `Gender: ${document.getElementById("gender").value}\n`;
+    const dob = document.getElementById("dob").value;
+    if(dob) text += `Date of birth: ${dob}\n`;
+    const nationality = document.getElementById("nationality").value;
+    if(nationality) text += `Nationality: ${nationality}\n`;
+    const nin = document.getElementById("ninNumber").value;
+    if(nin) text += `NIN number: ${nin}\n`;
     text += `Preferred contact time: ${document.getElementById("contactPref").value}\n`;
+    const kinFirst = document.getElementById("kinFirstName").value;
+    const kinLast = document.getElementById("kinLastName").value;
+    const kinPhone = document.getElementById("kinPhone").value;
+    if(kinFirst || kinLast || kinPhone){
+      text += `Next of kin: ${kinFirst} ${kinLast}`.trim();
+      if(kinPhone) text += `, Phone: ${kinPhone}`;
+      text += `\n`;
+    }
     const notes = document.getElementById("notes").value;
     if(notes) text += `Notes: ${notes}\n`;
 
