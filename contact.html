@@ -250,6 +250,7 @@
     border-bottom:1px solid rgba(255,255,255,0.1);
   }
   .foot-brand .brand-word{ color:#fff; }
+  .foot-brand .brand-word span{ color:var(--red); }
   .foot-brand p{ font-size:14px; margin-top:14px; max-width:280px; color:rgba(255,255,255,0.55); }
   .foot-col h4{
     font-size:13px; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:rgba(255,255,255,0.9);
@@ -373,7 +374,16 @@
     overflow:hidden;
     padding:150px 0 76px;
   }
-  .page-hero .hero-bg{ opacity:0.22; }
+  .page-hero .hero-bg{
+    position:absolute; inset:0;
+    background-size:cover;
+    background-position:center 30%;
+    opacity:0.22;
+  }
+  .page-hero .hero-fade{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(12,35,64,0.72) 0%, rgba(12,35,64,0.90) 55%, var(--navy) 100%);
+  }
   .page-hero-inner{ position:relative; }
   .breadcrumb{
     display:flex; align-items:center; gap:8px;
@@ -412,27 +422,28 @@
   }
 
 </style>
+<base target="_blank">
 </head>
 <body>
 
 <header>
   <nav class="wrap">
     <a href="index.html" class="brand">
-      <img src="data:image/png;base64,iVBORw0KGgo=" alt="Transporter Logistics logo">
+      <img src="logo.png" alt="Transporter Logistics logo">
       <span class="brand-word">Transporter<span> Logistics</span></span>
     </a>
     <div class="nav-links">
       <a href="index.html">Home</a>
-    
       <a href="about.html">About</a>
       <a href="book.html">services</a>
-     
       <a href="contact.html">Contact</a>
     </div>
     <div class="nav-cta">
-      
-    
+
     </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span>
+    </button>
   </nav>
 </header>
 
@@ -442,12 +453,11 @@
       <span class="brand-word">Menu</span>
       <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
     </div>
-   <a href="index.html">Home</a>
-    
-      <a href="about.html">About</a>
-      <a href="book.html">services</a>
-     
-      <a href="contact.html">Contact</a>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="book.html">services</a>
+    <a href="contact.html">Contact</a>
+  </div>
 </div>
 
 <main>
@@ -459,7 +469,7 @@
     <div class="wrap page-hero-inner">
       <div class="breadcrumb"><a href="index.html">Home</a> / Contact</div>
       <span class="eyebrow-tag">● Contact us</span>
-      <h1 style="margin-top:18px;">for booking assistance</h1>
+      <h1 style="margin-top:18px;">For booking assistance</h1>
       <p class="lede">Click any convenient option for you to get in touch with us</p>
     </div>
   </section>
@@ -510,16 +520,15 @@
               <div class="cf-field">
                 <label for="cf-service">Service</label>
                 <select id="cf-service">
-                  <option>logistics</option>
+                  <option>Logistics &amp; delivery</option>
                   <option>Bus</option>
                   <option>Flight</option>
                   <option>Train</option>
                   <option>Car rental</option>
                 </select>
               </div>
-             
             </div>
-            
+
             <button type="submit" class="btn btn-red cf-submit">Send via WhatsApp →</button>
             <p class="cf-note">By submitting, you'll be redirected to WhatsApp to complete your request.</p>
           </form>
@@ -542,7 +551,7 @@
     <div class="wrap cta-inner">
       <div>
         <h2>Ready to book?</h2>
-        <p>You can tell us what, where, and when- we'll talk care of the rest.</p>
+        <p>You can tell us what, where, and when- we'll take care of the rest.</p>
       </div>
       <div class="cta-actions">
         <a class="btn btn-red" href="https://wa.me/message/N6ALWP7FIS7VK1" target="_blank" rel="noopener">Send us a DM on WhatsApp</a>
@@ -558,26 +567,25 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="brand">
-          <img src="data:image/png;base64,iVBORw0KGgo=" alt="Transporter Logistics logo" style="height:40px;width:40px;">
+          <img src="logo.png" alt="Transporter Logistics logo" style="height:40px;width:40px;">
           <span class="brand-word">Transporter<span> Logistics</span></span>
         </a>
-        <p>Reliable logistics and delivery, based in Ogba, Agege, Lagos — moving packages by bike, road and air.</p>
+        <p>Nigeria's all-in-one mobility and logistics booking platform — buses, flights, car rentals, deliveries, and trains.</p>
       </div>
       <div class="foot-col">
         <h4>Services</h4>
         <ul>
-          <li><a href="index.html#services">Bike delivery</a></li>
-          <li><a href="index.html#services">Interstate</a></li>
-          <li><a href="index.html#services">International</a></li>
-          <li><a href="index.html#services">Free warehousing</a></li>
+          <li><a href="book.html">Bus bookings</a></li>
+          <li><a href="book.html">Flights</a></li>
+          <li><a href="book.html">Car rentals</a></li>
+          <li><a href="book.html">Deliveries</a></li>
+          <li><a href="book.html">Train travel</a></li>
         </ul>
       </div>
       <div class="foot-col">
         <h4>Company</h4>
         <ul>
           <li><a href="about.html">About us</a></li>
-          <li><a href="index.html#how">How it works</a></li>
-          <li><a href="index.html#why-best">Why choose us</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
@@ -619,12 +627,8 @@
     const name = document.getElementById('cf-name').value.trim();
     const phone = document.getElementById('cf-phone').value.trim();
     const service = document.getElementById('cf-service').value;
-    const route = document.getElementById('cf-route').value.trim();
-    const message = document.getElementById('cf-message').value.trim();
 
     let text = `Hi Transporter Logistics, I'd like a quote.\n\nName: ${name}\nPhone: ${phone}\nService: ${service}`;
-    if(route) text += `\nRoute: ${route}`;
-    if(message) text += `\nDetails: ${message}`;
 
     const url = `https://wa.me/message/N6ALWP7FIS7VK1?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
