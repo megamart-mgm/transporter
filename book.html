@@ -1080,10 +1080,7 @@
             </p>
           </div>
 
-          <div class="hero-stat">
-            <strong>+2k</strong>
-            <span>Bookings handled with reliable logistics support.</span>
-          </div>
+         
 
         </div>
 
@@ -1241,6 +1238,21 @@
 
             </div>
 
+   <!-- DELIVERY TYPE -->
+
+              <div class="field" id="extra3Field" style="display:none;">
+
+                <label for="extra3Select">
+                  Delivery type
+                </label>
+
+                <select id="extra3Select">
+                  <option value="Within Lagos">Within Lagos</option>
+                  <option value="Interstate">Interstate</option>
+                  <option value="International">International</option>
+                </select>
+
+              </div>
 
             <!-- DATE -->
 
@@ -1256,16 +1268,7 @@
 
               <!-- EXTRA SELECT -->
 
-              <div class="field" id="extraSelectField">
-
-                <label for="extraSelect" id="extraLabel">
-                  Cargo type
-                </label>
-
-                <select id="extraSelect"></select>
-
-              </div>
-
+            
               <!-- PASSENGER COUNT -->
 
               <div class="field" id="extraNumberField" style="display:none;">
@@ -1292,22 +1295,7 @@
 
               </div>
 
-              <!-- DELIVERY TYPE -->
-
-              <div class="field" id="extra3Field" style="display:none;">
-
-                <label for="extra3Select">
-                  Delivery type
-                </label>
-
-                <select id="extra3Select">
-                  <option value="Within Lagos">Within Lagos</option>
-                  <option value="Interstate">Interstate</option>
-                  <option value="International">International</option>
-                </select>
-
-              </div>
-
+           
               <!-- ITEM DESCRIPTION -->
 
               <div class="field full" id="itemDescRow" style="display:none;">
@@ -1921,6 +1909,12 @@
 
       if(!cfg) return;
 
+      // Logistics uses a one-step form; all other services keep Steps 2 and 3.
+      const step2Button = document.getElementById("toStep2");
+      if(step2Button){
+        step2Button.textContent = cfg.isDelivery ? "Submit via WhatsApp →" : "Continue to Details →";
+      }
+
 
       /* Update title */
 
@@ -2221,6 +2215,10 @@
           return;
         }
 
+        // Logistics bookings are completed on Step 1 and sent directly to WhatsApp.
+        sendBookingToWhatsApp();
+        return;
+
       }
 
       /* Other services */
@@ -2467,9 +2465,9 @@
        SUBMIT → WHATSAPP
     ========================== */
 
-    bookingForm.addEventListener("submit", function(e){
+    function sendBookingToWhatsApp(e){
 
-      e.preventDefault();
+      if(e) e.preventDefault();
 
       const cfg = modeConfig[currentMode];
 
@@ -2584,7 +2582,9 @@
         submitButton.disabled = false;
       }, 5000);
 
-    });
+    }
+
+    bookingForm.addEventListener("submit", sendBookingToWhatsApp);
 
 
     /* =========================
