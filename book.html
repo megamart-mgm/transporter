@@ -1385,6 +1385,13 @@
               <div id="deliveryPriceRows"></div>
             </div>
 
+            <!-- LIVE PRICE BOX (train only) -->
+
+            <div class="summary-box" id="trainPriceBox" style="display:none;">
+              <h3>Estimated Fare</h3>
+              <div id="trainPriceRows"></div>
+            </div>
+
 
             <div class="form-footer">
 
@@ -1667,6 +1674,90 @@
 
               <button type="button" class="btn btn-red" id="submitOrder">
                 Submit Order via WhatsApp
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               TRAIN PAYMENT STAGE
+          ========================== -->
+
+          <div class="panel" id="panelTrainPayment">
+
+            <div class="form-header">
+              <h2>Pay for Your Train Ticket</h2>
+              <p>
+                Review the fare below, then pay securely with Paystack to complete your booking.
+              </p>
+            </div>
+
+            <div class="summary-box">
+              <h3>Train Booking Summary</h3>
+              <div id="trainPaymentSummaryRows"></div>
+            </div>
+
+            <div class="summary-box">
+              <h3>Amount to Pay</h3>
+              <div class="summary-row">
+                <span class="summary-label">Total</span>
+                <span class="summary-value" id="trainPaymentAmountDisplay">₦0</span>
+              </div>
+            </div>
+
+            <div class="confirm-banner">
+              You will be charged the exact amount shown above. Once payment is
+              confirmed, you'll get a receipt and a button to send your booking
+              details to our WhatsApp team.
+            </div>
+
+            <div class="form-actions">
+
+              <button type="button" class="btn btn-outline" id="backToTrainPassengerDetails">
+                ← Edit details
+              </button>
+
+              <button type="button" class="btn btn-red" id="payTrainBtn">
+                Pay Now with Paystack
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               TRAIN RECEIPT / WHATSAPP STAGE
+          ========================== -->
+
+          <div class="panel" id="panelTrainReceipt">
+
+            <div class="form-header">
+              <h2>Payment Successful</h2>
+              <p>
+                Thank you! Your payment has been received. Send your booking to
+                our WhatsApp team to finalize your seat.
+              </p>
+            </div>
+
+            <div class="summary-box">
+              <h3>Payment Receipt</h3>
+              <div id="trainReceiptRows"></div>
+            </div>
+
+            <div class="confirm-banner">
+              <strong>WhatsApp confirmation:</strong>
+              When you click "Submit to WhatsApp", WhatsApp will open with your
+              booking and payment details already prepared. Please press
+              <strong>Send</strong> in WhatsApp so our team receives your request.
+            </div>
+
+            <div class="form-actions">
+
+              <button type="button" class="btn btn-red" id="submitTrainOrder">
+                Submit to WhatsApp
               </button>
 
             </div>
@@ -2187,6 +2278,7 @@
         document.getElementById("interstateFields").style.display = "none";
         document.getElementById("internationalFields").style.display = "none";
         document.getElementById("deliveryPriceBox").style.display = "none";
+        document.getElementById("trainPriceBox").style.display = "none";
 
         dateLabel.textContent = cfg.dateLabel;
         originLabel.textContent = cfg.originLabel;
@@ -2292,6 +2384,11 @@
           extra2Input.type = cfg.extra2Type || "text";
           extra2Input.placeholder = cfg.extra2Placeholder || "";
 
+        }
+
+
+        if(mode === "train"){
+          updateTrainPrice();
         }
 
       }
@@ -2652,6 +2749,137 @@
 
 
     /* =========================
+       TRAIN: ZONES, RATES
+    ========================== */
+
+    // Each station belongs to one of 3 fare zones. Zone assignment drives
+    // the flat per-passenger fare between any two zones (see trainZonePricing).
+    const trainZoneMap = {
+      "Mobolaji Johnson Station Ebute Metta": 1,
+      "Babatunde Raji Fashola Station Agege": 1,
+      "Lateef Kayode Jakande Station Agbado": 1,
+      "Professor Yemi Oshinbajo Station Kajola": 1,
+      "Olu Funmilayo Ransome Kuti Papalanto": 2,
+      "Professor Wole Soyinka Station Abeokuta": 2,
+      "Aremo Olusegun Osoba Olodo": 3,
+      "Ladoke Akintola Station Omi-Adio": 3,
+      "Obafemi Awolowo Station Moniya": 3
+    };
+
+    // Per-passenger fares between zones. Already include the flat ₦500 increase.
+    const trainZonePricing = {
+      "1-2": { "First Class": 9500, "Business": 5000, "Standard": 3500 },
+      "1-3": { "First Class": 13500, "Business": 7000, "Standard": 4100 },
+      "2-3": { "First Class": 6500, "Business": 3500, "Standard": 2500 }
+    };
+
+    const trainPriceBox = document.getElementById("trainPriceBox");
+    const trainPriceRows = document.getElementById("trainPriceRows");
+
+
+    // Returns an object describing the current train fare, or a manual-quote flag
+    // for same-station / same-zone trips that aren't in the fare table.
+    function computeTrainPrice(){
+
+      const origin = originSelect.value;
+      const dest = destSelect.value;
+      const travelClass = extra2Select.value;
+      const passengers = parseInt(extraNumber.value, 10) || 1;
+
+      if(!origin || !dest || !travelClass){
+        return { incomplete:true };
+      }
+
+      if(origin === dest){
+        return { manualQuote:true, reason:"Same station selected — call/WhatsApp us for price." };
+      }
+
+      const zoneA = trainZoneMap[origin];
+      const zoneB = trainZoneMap[dest];
+
+      if(!zoneA || !zoneB){
+        return { incomplete:true };
+      }
+
+      if(zoneA === zoneB){
+        return { manualQuote:true, reason:"Short-hop fare — call/WhatsApp us for price." };
+      }
+
+      const key = [zoneA, zoneB].sort().join("-");
+      const pricing = trainZonePricing[key];
+
+      if(!pricing || !pricing[travelClass]){
+        return { incomplete:true };
+      }
+
+      const fare = pricing[travelClass];
+      const total = fare * passengers;
+
+      return {
+        manualQuote:false,
+        breakdown:[
+          [travelClass + " fare (per passenger)", formatNaira(fare)],
+          ["Passengers (× " + passengers + ")", formatNaira(fare * passengers)]
+        ],
+        total: total
+      };
+
+    }
+
+
+    function updateTrainPrice(){
+
+      if(currentMode !== "train"){
+        trainPriceBox.style.display = "none";
+        return;
+      }
+
+      const result = computeTrainPrice();
+
+      if(result.manualQuote){
+        trainPriceBox.style.display = "";
+        trainPriceRows.innerHTML =
+          '<div class="summary-row"><span class="summary-label">Pricing</span>' +
+          '<span class="summary-value">Call/WhatsApp us for price</span></div>';
+        return;
+      }
+
+      if(result.incomplete){
+        trainPriceBox.style.display = "none";
+        return;
+      }
+
+      let rowsHtml = "";
+
+      result.breakdown.forEach(function(row){
+        rowsHtml += '<div class="summary-row"><span class="summary-label">' + row[0] +
+          '</span><span class="summary-value">' + row[1] + '</span></div>';
+      });
+
+      rowsHtml += '<div class="summary-row"><span class="summary-label"><strong>Total</strong></span>' +
+        '<span class="summary-value">' + formatNaira(result.total) + '</span></div>';
+
+      trainPriceRows.innerHTML = rowsHtml;
+      trainPriceBox.style.display = "";
+
+    }
+
+
+    [originSelect, destSelect, extraNumber, extra2Select].forEach(function(el){
+      el.addEventListener("change", function(){
+        if(currentMode === "train"){
+          updateTrainPrice();
+        }
+      });
+      el.addEventListener("input", function(){
+        if(currentMode === "train"){
+          updateTrainPrice();
+        }
+      });
+    });
+
+
+    /* =========================
        STEP 1 → STEP 2 (or Payment for delivery)
     ========================== */
 
@@ -2925,6 +3153,189 @@
 
 
     /* =========================
+       TRAIN PAYMENT STAGE
+    ========================== */
+
+    let lastTrainPriceResult = null;
+    let lastTrainPaymentReference = null;
+
+
+    function buildTrainSummaryHtml(){
+
+      const originText = originSelect.selectedOptions[0] ? originSelect.selectedOptions[0].textContent : "";
+      const destText = destSelect.selectedOptions[0] ? destSelect.selectedOptions[0].textContent : "";
+      const travelClass = extra2Select.value;
+      const passengers = extraNumber.value || "1";
+      const date = dateInput.value;
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      let html = "";
+
+      html += '<div class="summary-row"><span class="summary-label">Route</span><span class="summary-value">' + originText + ' → ' + destText + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Travel date</span><span class="summary-value">' + date + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Class</span><span class="summary-value">' + travelClass + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Passengers</span><span class="summary-value">' + passengers + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Passenger name</span><span class="summary-value">' + firstName + ' ' + lastName + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Phone</span><span class="summary-value">' + phone + '</span></div>';
+
+      return html;
+
+    }
+
+
+    function openTrainPaymentStage(priceResult){
+
+      lastTrainPriceResult = priceResult;
+
+      document.getElementById("trainPaymentSummaryRows").innerHTML = buildTrainSummaryHtml();
+      document.getElementById("trainPaymentAmountDisplay").textContent = formatNaira(priceResult.total);
+
+      goToPanel("panelTrainPayment");
+
+    }
+
+
+    document.getElementById("backToTrainPassengerDetails").addEventListener("click", function(){
+      goToPanel("panel2");
+    });
+
+
+    document.getElementById("payTrainBtn").addEventListener("click", function(){
+
+      if(!lastTrainPriceResult || !lastTrainPriceResult.total){
+        return;
+      }
+
+      const email = document.getElementById("email").value.trim();
+
+      if(!email){
+        document.getElementById("email").focus();
+        goToPanel("panel2");
+        return;
+      }
+
+      const payBtn = document.getElementById("payTrainBtn");
+      payBtn.disabled = true;
+      payBtn.textContent = "Opening Paystack…";
+
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: email,
+        amount: Math.round(lastTrainPriceResult.total) * 100, // kobo
+        currency: "NGN",
+        ref: "TL-TRN-" + Date.now(),
+        metadata: {
+          custom_fields: [
+            {
+              display_name: "Travel class",
+              variable_name: "travel_class",
+              value: extra2Select.value
+            }
+          ]
+        },
+        callback: function(response){
+          lastTrainPaymentReference = response.reference;
+          payBtn.disabled = false;
+          payBtn.textContent = "Pay Now with Paystack";
+          showTrainReceipt(response.reference);
+        },
+        onClose: function(){
+          payBtn.disabled = false;
+          payBtn.textContent = "Pay Now with Paystack";
+        }
+      });
+
+      handler.openIframe();
+
+    });
+
+
+    function showTrainReceipt(reference){
+
+      let html = buildTrainSummaryHtml();
+
+      html += '<div class="summary-row"><span class="summary-label">Amount paid</span><span class="summary-value">' +
+        formatNaira(lastTrainPriceResult.total) + '</span></div>';
+
+      html += '<div class="summary-row"><span class="summary-label">Payment reference</span><span class="summary-value">' +
+        reference + '</span></div>';
+
+      document.getElementById("trainReceiptRows").innerHTML = html;
+
+      goToPanel("panelTrainReceipt");
+
+    }
+
+
+    document.getElementById("submitTrainOrder").addEventListener("click", function(){
+      sendTrainToWhatsApp(lastTrainPaymentReference);
+    });
+
+
+    function sendTrainToWhatsApp(paymentReference){
+
+      const originText = originSelect.selectedOptions[0] ? originSelect.selectedOptions[0].textContent : "";
+      const destText = destSelect.selectedOptions[0] ? destSelect.selectedOptions[0].textContent : "";
+      const travelClass = extra2Select.value;
+      const passengers = extraNumber.value || "1";
+      const date = dateInput.value;
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const ninNumber = document.getElementById("ninNumber").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      let message = "";
+
+      message += "TRANSPORTER LOGISTICS BOOKING REQUEST\n\n";
+      message += "SERVICE: Train Booking\n\n";
+
+      message += "FROM: " + originText + "\n";
+      message += "TO: " + destText + "\n";
+      message += "TRAVEL DATE: " + date + "\n";
+      message += "CLASS: " + travelClass + "\n";
+      message += "PASSENGERS: " + passengers + "\n\n";
+
+      message += "PASSENGER DETAILS\n";
+      message += "Name: " + firstName + " " + lastName + "\n";
+      message += "Phone: " + phone + "\n";
+      message += "Email: " + (email || "Not provided") + "\n";
+      message += "NIN: " + (ninNumber || "Not provided") + "\n\n";
+
+      message += "ADDITIONAL NOTES\n";
+      message += (notes || "No additional notes.") + "\n\n";
+
+      if(paymentReference){
+        message += "PAYMENT: PAID via Paystack\n";
+        message += "AMOUNT PAID: " + formatNaira(lastTrainPriceResult.total) + "\n";
+        message += "PAYMENT REFERENCE: " + paymentReference + "\n";
+      }
+      else{
+        message += "PAYMENT: Not paid online — price to be confirmed on WhatsApp.\n";
+      }
+
+      openWhatsApp(message);
+
+      const submitButton = document.getElementById("submitTrainOrder");
+      if(submitButton){
+        submitButton.textContent = "Booking Sent ✓";
+        submitButton.disabled = true;
+
+        setTimeout(function(){
+          submitButton.textContent = "Submit to WhatsApp";
+          submitButton.disabled = false;
+        }, 5000);
+      }
+
+    }
+
+
+    /* =========================
        ESCAPE HTML
     ========================== */
 
@@ -3056,6 +3467,53 @@
           field.reportValidity();
           return;
         }
+
+      }
+
+      /* Train: route through Paystack payment before WhatsApp submission */
+
+      if(currentMode === "train"){
+
+        const email = document.getElementById("email").value.trim();
+
+        if(!email){
+          const emailField = document.getElementById("email");
+          emailField.focus();
+          emailField.reportValidity();
+          return;
+        }
+
+        if(!originSelect.value){
+          originSelect.focus();
+          return;
+        }
+
+        if(!destSelect.value){
+          destSelect.focus();
+          return;
+        }
+
+        if(!extra2Select.value){
+          extra2Select.focus();
+          return;
+        }
+
+        const priceResult = computeTrainPrice();
+
+        // Same-station / same-zone hops aren't in the fare table — fall back
+        // to the normal WhatsApp-only confirmation flow (no online payment).
+        if(priceResult.manualQuote){
+          buildSummary();
+          goToStep(3);
+          return;
+        }
+
+        if(priceResult.incomplete){
+          return;
+        }
+
+        openTrainPaymentStage(priceResult);
+        return;
 
       }
 
