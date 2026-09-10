@@ -2801,11 +2801,29 @@
         return { incomplete:true };
       }
 
-      if(zoneA === zoneB){
+      // Only Ebute Metta/Agege/Agbado/Kajola <-> each other (zone 1 <-> zone 1)
+      // is an unpriced short hop. Papalanto<->Abeokuta (zone 2<->zone 2) and
+      // Osoba Olodo/Omi-Adio/Moniya <-> each other (zone 3<->zone 3) DO have
+      // a fixed fare — the same one used for zone 2 <-> zone 3 — so they must
+      // not fall into the manual-quote branch below.
+      if(zoneA === 1 && zoneB === 1){
         return { manualQuote:true, reason:"Short-hop fare — call/WhatsApp us for price." };
       }
 
-      const key = [zoneA, zoneB].sort().join("-");
+      let key;
+
+      if((zoneA === 1 && zoneB === 2) || (zoneA === 2 && zoneB === 1)){
+        key = "1-2";
+      }
+      else if((zoneA === 1 && zoneB === 3) || (zoneA === 3 && zoneB === 1)){
+        key = "1-3";
+      }
+      else{
+        // Covers 2-3, 2-2 (Papalanto<->Abeokuta), and 3-3
+        // (Osoba Olodo/Omi-Adio/Moniya among themselves) — all one fare.
+        key = "2-3";
+      }
+
       const pricing = trainZonePricing[key];
 
       if(!pricing || !pricing[travelClass]){
