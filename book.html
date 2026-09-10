@@ -2897,18 +2897,15 @@
         return { incomplete:true };
       }
 
-      // Only Ebute Metta/Agege/Agbado/Kajola <-> each other (zone 1 <-> zone 1)
-      // is an unpriced short hop. Papalanto<->Abeokuta (zone 2<->zone 2) and
-      // Osoba Olodo/Omi-Adio/Moniya <-> each other (zone 3<->zone 3) DO have
-      // a fixed fare — the same one used for zone 2 <-> zone 3 — so they must
-      // not fall into the manual-quote branch below.
-      if(zoneA === 1 && zoneB === 1){
-        return { manualQuote:true, reason:"Short-hop fare — call/WhatsApp us for price." };
-      }
-
+      // Ebute Metta/Agege/Agbado/Kajola among themselves share the same
+      // ₦9,500 / ₦5,000 / ₦3,500 fare as the zone 1 <-> zone 2 tier below,
+      // so a zone-1-to-zone-1 trip is just folded into that same "1-2" key.
       let key;
 
-      if((zoneA === 1 && zoneB === 2) || (zoneA === 2 && zoneB === 1)){
+      if(zoneA === 1 && zoneB === 1){
+        key = "1-2";
+      }
+      else if((zoneA === 1 && zoneB === 2) || (zoneA === 2 && zoneB === 1)){
         key = "1-2";
       }
       else if((zoneA === 1 && zoneB === 3) || (zoneA === 3 && zoneB === 1)){
