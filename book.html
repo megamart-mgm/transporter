@@ -1392,6 +1392,13 @@
               <div id="trainPriceRows"></div>
             </div>
 
+            <!-- LIVE PRICE BOX (bus only) -->
+
+            <div class="summary-box" id="busPriceBox" style="display:none;">
+              <h3>Estimated Fare</h3>
+              <div id="busPriceRows"></div>
+            </div>
+
 
             <div class="form-footer">
 
@@ -1757,6 +1764,90 @@
             <div class="form-actions">
 
               <button type="button" class="btn btn-red" id="submitTrainOrder">
+                Submit to WhatsApp
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               BUS PAYMENT STAGE
+          ========================== -->
+
+          <div class="panel" id="panelBusPayment">
+
+            <div class="form-header">
+              <h2>Pay for Your Bus Ticket</h2>
+              <p>
+                Review the fare below, then pay securely with Paystack to complete your booking.
+              </p>
+            </div>
+
+            <div class="summary-box">
+              <h3>Bus Booking Summary</h3>
+              <div id="busPaymentSummaryRows"></div>
+            </div>
+
+            <div class="summary-box">
+              <h3>Amount to Pay</h3>
+              <div class="summary-row">
+                <span class="summary-label">Total</span>
+                <span class="summary-value" id="busPaymentAmountDisplay">₦0</span>
+              </div>
+            </div>
+
+            <div class="confirm-banner">
+              You will be charged the exact amount shown above. Once payment is
+              confirmed, you'll get a receipt and a button to send your booking
+              details to our WhatsApp team.
+            </div>
+
+            <div class="form-actions">
+
+              <button type="button" class="btn btn-outline" id="backToBusPassengerDetails">
+                ← Edit details
+              </button>
+
+              <button type="button" class="btn btn-red" id="payBusBtn">
+                Pay Now with Paystack
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               BUS RECEIPT / WHATSAPP STAGE
+          ========================== -->
+
+          <div class="panel" id="panelBusReceipt">
+
+            <div class="form-header">
+              <h2>Payment Successful</h2>
+              <p>
+                Thank you! Your payment has been received. Send your booking to
+                our WhatsApp team to finalize your seat.
+              </p>
+            </div>
+
+            <div class="summary-box">
+              <h3>Payment Receipt</h3>
+              <div id="busReceiptRows"></div>
+            </div>
+
+            <div class="confirm-banner">
+              <strong>WhatsApp confirmation:</strong>
+              When you click "Submit to WhatsApp", WhatsApp will open with your
+              booking and payment details already prepared. Please press
+              <strong>Send</strong> in WhatsApp so our team receives your request.
+            </div>
+
+            <div class="form-actions">
+
+              <button type="button" class="btn btn-red" id="submitBusOrder">
                 Submit to WhatsApp
               </button>
 
@@ -2279,6 +2370,7 @@
         document.getElementById("internationalFields").style.display = "none";
         document.getElementById("deliveryPriceBox").style.display = "none";
         document.getElementById("trainPriceBox").style.display = "none";
+        document.getElementById("busPriceBox").style.display = "none";
 
         dateLabel.textContent = cfg.dateLabel;
         originLabel.textContent = cfg.originLabel;
@@ -2389,6 +2481,9 @@
 
         if(mode === "train"){
           updateTrainPrice();
+        }
+        else if(mode === "bus"){
+          updateBusPrice();
         }
 
       }
@@ -2883,15 +2978,147 @@
     }
 
 
+    /* =========================
+       BUS: ROUTES, RATES
+    ========================== */
+
+    // Per-passenger fare, keyed by exact origin city -> destination city
+    // strings (must match the option text in modeConfig.bus). Routes not
+    // listed here fall back to a manual WhatsApp quote.
+    const busPricing = {
+      "Lagos": {
+        "Abuja": 41500,
+        "Abuja NYSC Camp": 42000,
+        "Anambra NYSC Camp": 42000,
+        "Asaba": 35000,
+        "Awka": 40000,
+        "Benin City": 21500,
+        "Delta NYSC Camp": 41000,
+        "Edo NYSC Camp": 30000,
+        "Ekiti NYSC Camp": 19000,
+        "Imo NYSC Camp": 43000,
+        "Onitsha": 40000,
+        "Ondo NYSC Camp": 19000,
+        "Owerri": 43000,
+        "Port harcourt": 43000,
+        "Rivers NYSC camp": 45000,
+        "Sapele": 30000,
+        "Warri": 34000
+      },
+      "Abuja": {
+        "Owerri": 52000,
+        "Port harcourt": 53000,
+        "Lagos": 45000
+      },
+      "Port harcourt": {
+        "Abuja": 47000,
+        "Owerri": 7000,
+        "Lagos": 45000
+      },
+      "Benin city": {
+        "Awka": 19000,
+        "Onitsha": 10000,
+        "Owerri": 19000
+      },
+      "Anambra": {
+        "Lagos": 38000
+      }
+    };
+
+    const busPriceBox = document.getElementById("busPriceBox");
+    const busPriceRows = document.getElementById("busPriceRows");
+
+
+    // Returns an object describing the current bus fare, or a manual-quote
+    // flag for same-city trips or any route not yet in busPricing.
+    function computeBusPrice(){
+
+      const origin = originSelect.value;
+      const dest = destSelect.value;
+      const passengers = parseInt(extraNumber.value, 10) || 1;
+
+      if(!origin || !dest){
+        return { incomplete:true };
+      }
+
+      if(origin === dest){
+        return { manualQuote:true, reason:"Same city selected — call/WhatsApp us for price." };
+      }
+
+      const originRoutes = busPricing[origin];
+      const fare = originRoutes ? originRoutes[dest] : undefined;
+
+      if(!fare){
+        return { manualQuote:true, reason:"Route not yet priced — call/WhatsApp us for price." };
+      }
+
+      const total = fare * passengers;
+
+      return {
+        manualQuote:false,
+        breakdown:[
+          ["Fare (per passenger)", formatNaira(fare)],
+          ["Passengers (× " + passengers + ")", formatNaira(fare * passengers)]
+        ],
+        total: total
+      };
+
+    }
+
+
+    function updateBusPrice(){
+
+      if(currentMode !== "bus"){
+        busPriceBox.style.display = "none";
+        return;
+      }
+
+      const result = computeBusPrice();
+
+      if(result.manualQuote){
+        busPriceBox.style.display = "";
+        busPriceRows.innerHTML =
+          '<div class="summary-row"><span class="summary-label">Pricing</span>' +
+          '<span class="summary-value">Call/WhatsApp us for price</span></div>';
+        return;
+      }
+
+      if(result.incomplete){
+        busPriceBox.style.display = "none";
+        return;
+      }
+
+      let rowsHtml = "";
+
+      result.breakdown.forEach(function(row){
+        rowsHtml += '<div class="summary-row"><span class="summary-label">' + row[0] +
+          '</span><span class="summary-value">' + row[1] + '</span></div>';
+      });
+
+      rowsHtml += '<div class="summary-row"><span class="summary-label"><strong>Total</strong></span>' +
+        '<span class="summary-value">' + formatNaira(result.total) + '</span></div>';
+
+      busPriceRows.innerHTML = rowsHtml;
+      busPriceBox.style.display = "";
+
+    }
+
+
     [originSelect, destSelect, extraNumber, extra2Select].forEach(function(el){
       el.addEventListener("change", function(){
         if(currentMode === "train"){
           updateTrainPrice();
         }
+        else if(currentMode === "bus"){
+          updateBusPrice();
+        }
       });
       el.addEventListener("input", function(){
         if(currentMode === "train"){
           updateTrainPrice();
+        }
+        else if(currentMode === "bus"){
+          updateBusPrice();
         }
       });
     });
@@ -3354,6 +3581,194 @@
 
 
     /* =========================
+       BUS PAYMENT STAGE
+    ========================== */
+
+    let lastBusPriceResult = null;
+    let lastBusPaymentReference = null;
+
+
+    function buildBusSummaryHtml(){
+
+      const originText = originSelect.value;
+      const destText = destSelect.value;
+      const seatPref = extra2Select.value;
+      const passengers = extraNumber.value || "1";
+      const date = dateInput.value;
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      let html = "";
+
+      html += '<div class="summary-row"><span class="summary-label">Route</span><span class="summary-value">' + originText + ' → ' + destText + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Travel date</span><span class="summary-value">' + date + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Seat preference</span><span class="summary-value">' + seatPref + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Passengers</span><span class="summary-value">' + passengers + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Passenger name</span><span class="summary-value">' + firstName + ' ' + lastName + '</span></div>';
+      html += '<div class="summary-row"><span class="summary-label">Phone</span><span class="summary-value">' + phone + '</span></div>';
+
+      return html;
+
+    }
+
+
+    function openBusPaymentStage(priceResult){
+
+      lastBusPriceResult = priceResult;
+
+      document.getElementById("busPaymentSummaryRows").innerHTML = buildBusSummaryHtml();
+      document.getElementById("busPaymentAmountDisplay").textContent = formatNaira(priceResult.total);
+
+      goToPanel("panelBusPayment");
+
+    }
+
+
+    document.getElementById("backToBusPassengerDetails").addEventListener("click", function(){
+      goToPanel("panel2");
+    });
+
+
+    document.getElementById("payBusBtn").addEventListener("click", function(){
+
+      if(!lastBusPriceResult || !lastBusPriceResult.total){
+        return;
+      }
+
+      const email = document.getElementById("email").value.trim();
+
+      if(!email){
+        document.getElementById("email").focus();
+        goToPanel("panel2");
+        return;
+      }
+
+      const payBtn = document.getElementById("payBusBtn");
+      payBtn.disabled = true;
+      payBtn.textContent = "Opening Paystack…";
+
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: email,
+        amount: Math.round(lastBusPriceResult.total) * 100, // kobo
+        currency: "NGN",
+        ref: "TL-BUS-" + Date.now(),
+        metadata: {
+          custom_fields: [
+            {
+              display_name: "Seat preference",
+              variable_name: "seat_preference",
+              value: extra2Select.value
+            }
+          ]
+        },
+        callback: function(response){
+          lastBusPaymentReference = response.reference;
+          payBtn.disabled = false;
+          payBtn.textContent = "Pay Now with Paystack";
+          showBusReceipt(response.reference);
+        },
+        onClose: function(){
+          payBtn.disabled = false;
+          payBtn.textContent = "Pay Now with Paystack";
+        }
+      });
+
+      handler.openIframe();
+
+    });
+
+
+    function showBusReceipt(reference){
+
+      let html = buildBusSummaryHtml();
+
+      html += '<div class="summary-row"><span class="summary-label">Amount paid</span><span class="summary-value">' +
+        formatNaira(lastBusPriceResult.total) + '</span></div>';
+
+      html += '<div class="summary-row"><span class="summary-label">Payment reference</span><span class="summary-value">' +
+        reference + '</span></div>';
+
+      document.getElementById("busReceiptRows").innerHTML = html;
+
+      goToPanel("panelBusReceipt");
+
+    }
+
+
+    document.getElementById("submitBusOrder").addEventListener("click", function(){
+      sendBusToWhatsApp(lastBusPaymentReference);
+    });
+
+
+    function sendBusToWhatsApp(paymentReference){
+
+      const originText = originSelect.value;
+      const destText = destSelect.value;
+      const seatPref = extra2Select.value;
+      const passengers = extraNumber.value || "1";
+      const date = dateInput.value;
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const kinFirstName = document.getElementById("kinFirstName").value.trim();
+      const kinLastName = document.getElementById("kinLastName").value.trim();
+      const kinPhone = document.getElementById("kinPhone").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      let message = "";
+
+      message += "TRANSPORTER LOGISTICS BOOKING REQUEST\n\n";
+      message += "SERVICE: Bus Booking\n\n";
+
+      message += "FROM: " + originText + "\n";
+      message += "TO: " + destText + "\n";
+      message += "TRAVEL DATE: " + date + "\n";
+      message += "SEAT PREFERENCE: " + seatPref + "\n";
+      message += "PASSENGERS: " + passengers + "\n\n";
+
+      message += "PASSENGER DETAILS\n";
+      message += "Name: " + firstName + " " + lastName + "\n";
+      message += "Phone: " + phone + "\n";
+      message += "Email: " + (email || "Not provided") + "\n\n";
+
+      message += "NEXT OF KIN\n";
+      message += "Name: " + (kinFirstName + " " + kinLastName).trim() + "\n";
+      message += "Phone: " + (kinPhone || "Not provided") + "\n\n";
+
+      message += "ADDITIONAL NOTES\n";
+      message += (notes || "No additional notes.") + "\n\n";
+
+      if(paymentReference){
+        message += "PAYMENT: PAID via Paystack\n";
+        message += "AMOUNT PAID: " + formatNaira(lastBusPriceResult.total) + "\n";
+        message += "PAYMENT REFERENCE: " + paymentReference + "\n";
+      }
+      else{
+        message += "PAYMENT: Not paid online — price to be confirmed on WhatsApp.\n";
+      }
+
+      openWhatsApp(message);
+
+      const submitButton = document.getElementById("submitBusOrder");
+      if(submitButton){
+        submitButton.textContent = "Booking Sent ✓";
+        submitButton.disabled = true;
+
+        setTimeout(function(){
+          submitButton.textContent = "Submit to WhatsApp";
+          submitButton.disabled = false;
+        }, 5000);
+      }
+
+    }
+
+
+    /* =========================
        ESCAPE HTML
     ========================== */
 
@@ -3487,6 +3902,49 @@
         }
 
       }
+
+      /* Bus: route through Paystack payment before WhatsApp submission */
+
+      if(currentMode === "bus"){
+
+        const email = document.getElementById("email").value.trim();
+
+        if(!email){
+          const emailField = document.getElementById("email");
+          emailField.focus();
+          emailField.reportValidity();
+          return;
+        }
+
+        if(!originSelect.value){
+          originSelect.focus();
+          return;
+        }
+
+        if(!destSelect.value){
+          destSelect.focus();
+          return;
+        }
+
+        const priceResult = computeBusPrice();
+
+        // Same-city or not-yet-priced routes fall back to the normal
+        // WhatsApp-only confirmation flow (no online payment).
+        if(priceResult.manualQuote){
+          buildSummary();
+          goToStep(3);
+          return;
+        }
+
+        if(priceResult.incomplete){
+          return;
+        }
+
+        openBusPaymentStage(priceResult);
+        return;
+
+      }
+
 
       /* Train: route through Paystack payment before WhatsApp submission */
 
